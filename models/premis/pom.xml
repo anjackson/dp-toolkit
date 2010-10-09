@@ -33,9 +33,9 @@
 	</pluginRepositories>
 
 	<build>
-		<resources>
-		</resources>
-		<plugins>
+  <resources>
+  </resources>
+  <plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
@@ -44,35 +44,65 @@
 				</configuration>
 			</plugin>
 			<plugin>
+	    <artifactId>maven-antrun-plugin</artifactId>
+    <executions>
+      <execution>
+        <phase>prepare-package</phase>
+        <configuration>
+          <tasks>
+          	<copy file="src/main/resources/premis-v2.0/premis.xsd" todir="target"/>
+            <replace token= "my.package.prefix." value="" dir="target">
+              <include name="*.xsd"/>
+            </replace>
+          </tasks>
+        </configuration>
+        <goals>
+          <goal>run</goal>
+        </goals>
+      </execution>
+    </executions>
+  </plugin>
+			<plugin>
 				<groupId>com.sun.tools.xjc.maven2</groupId>
 				<artifactId>maven-jaxb-plugin</artifactId>
 				<executions>
 					<execution>
+						<id>PREMIS 1.1</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
-					</execution>
-				</executions>
 				<configuration>
 					<generatePackage>gov.loc.standards.premis.v1_1</generatePackage>
 					<includeSchemas>
-						<includeSchema>**/*.xsd</includeSchema>
+						<includeSchema>premis-v1.1/*.xsd</includeSchema>
 					</includeSchemas>
 					<!--
-						From http://www.loc.gov/standards/premis/schemas.html
-
-						<includeSchemas> <includeSchema>**/*.xsd</includeSchema>
-						<includeSchema>**/*.dtd</includeSchema> </includeSchemas>
-						<excludeSchemas> <excludeSchema>test*.xsd</excludeSchema>
-						</excludeSchemas>
-					-->
-					<!--
-						<includeBindings> <includeBinding>*.xjb.xml</includeBinding>
+						<includeBindings>
+							<includeBinding>premis-v1.1/premis.xjb.xml</includeBinding>
 						</includeBindings>
 					-->
 					<strict>true</strict>
 					<verbose>false</verbose>
 				</configuration>
+					</execution>
+					<execution>
+						<id>PREMIS 2.0</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+				<configuration>
+					<generatePackage>gov.loc.standards.premis.v2_0</generatePackage>
+					<includeSchemas>
+						<includeSchema>premis-v2.0/premis.xsd</includeSchema>
+					</includeSchemas>
+						<includeBindings>
+							<includeBinding>premis-v2.0/premis.xjb.xml</includeBinding>
+						</includeBindings>
+					<strict>true</strict>
+					<verbose>false</verbose>
+				</configuration>
+				</execution>
+				</executions>
 			</plugin>
 	<plugin>
 		<artifactId>maven-dependency-plugin</artifactId>

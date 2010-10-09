@@ -1,10 +1,36 @@
 <jxb:bindings version="1.0"
               xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
               xmlns:xs="http://www.w3.org/2001/XMLSchema">
-   <jxb:bindings node="//xs:complexType[@name='premis']">
-    <jxb:bindings node=".//xs:element[@ref='object']">
-     <jxb:property name="premisObject"/>
-    </jxb:bindings>
+   <jxb:bindings schemaLocation="premis.xsd" node="/xs:schema">
+   	<!--
+<jxb:globalBindings
+    fixedAttributeAsConstantProperty="true"
+    collectionType="java.util.Vector"
+    typesafeEnumBase="xs:NCName"
+    choiceContentProperty="false"
+    typesafeEnumMemberName="generateError"
+    enableFailFastCheck="false"   
+    generateIsSetMethod="false"
+    underscoreBinding="asCharInWord"/>
+	-->
+<!--    bindingStyle="elementBinding" modelGroupBinding -->
+<jxb:schemaBindings>
+    <jxb:package name="gov.loc.standards.premis.v2_0">
+        <jxb:javadoc><![CDATA[<body>
+Package level documentation for PREMIS - http://www.loc.gov/standards/premis/schemas.html
+</body>]]>
+        </jxb:javadoc>
+    </jxb:package>
+<!--
+    	    <jxb:nameXmlTransform>
+    	<jxb:typeName fred="" suffix="ComplexType"/>
+    </jxb:nameXmlTransform>
+	-->
+</jxb:schemaBindings> 
+
+   <jxb:bindings node="//xs:complexType[@name='premisComplexType']">
+     <jxb:class name="Premis"/>
+   </jxb:bindings>
    </jxb:bindings>
    <!--  This does not work - perhaps just a config problem?:
 [INFO] [jaxb:generate]
