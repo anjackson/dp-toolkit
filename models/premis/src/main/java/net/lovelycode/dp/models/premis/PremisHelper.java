@@ -1,15 +1,16 @@
 /**
  * 
  */
-package net.lovelycode.dpt.metadata.premis;
+package net.lovelycode.dp.models.premis;
 
-import gov.loc.standards.premis.v1_1.Agent;
-import gov.loc.standards.premis.v1_1.Event;
-import gov.loc.standards.premis.v1_1.Premis;
-import gov.loc.standards.premis.v1_1.Rights;
-import gov.loc.standards.premis.v1_1.Object;
-import gov.loc.standards.premis.v1_1.Agent.AgentIdentifier;
-import gov.loc.standards.premis.v1_1.Event.EventIdentifier;
+import gov.loc.standards.premis.v2_0.Agent;
+import gov.loc.standards.premis.v2_0.Event;
+import gov.loc.standards.premis.v2_0.OriginalName;
+import gov.loc.standards.premis.v2_0.Premis;
+import gov.loc.standards.premis.v2_0.Rights;
+import gov.loc.standards.premis.v2_0.File;
+import gov.loc.standards.premis.v2_0.AgentIdentifier;
+import gov.loc.standards.premis.v2_0.EventIdentifier;
 
 
 /**
@@ -31,12 +32,14 @@ public class PremisHelper {
         ai.setAgentIdentifierType(null);
         ai.setAgentIdentifierValue(null);
         a.getAgentIdentifier().add(ai);
-        a.getAgentName().add("bob");
+        a.getAgentName().add("Agent Smith");
         p.getAgent().add(a);
         
-        Object o = new Object();
-        o.setObjectCategory(null);
-        p.getObject().add(o);
+        OriginalName on = new OriginalName();
+        on.setTitle("Title");
+        File f = new File();
+        f.setOriginalName(on);
+        p.getObject().add(f);
         
         Event e = new Event();
         e.setEventDateTime(null);

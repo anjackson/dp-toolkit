@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.lovelycode.dp.models</groupId>
+	<groupId>net.lovelycode.dp.models</groupId>
 	<artifactId>premis</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>2.0.0-SNAPSHOT</version>
 
 	<repositories>
 		<repository>
@@ -44,25 +44,6 @@
 				</configuration>
 			</plugin>
 			<plugin>
-	    <artifactId>maven-antrun-plugin</artifactId>
-    <executions>
-      <execution>
-        <phase>prepare-package</phase>
-        <configuration>
-          <tasks>
-          	<copy file="src/main/resources/premis-v2.0/premis.xsd" todir="target"/>
-            <replace token= "my.package.prefix." value="" dir="target">
-              <include name="*.xsd"/>
-            </replace>
-          </tasks>
-        </configuration>
-        <goals>
-          <goal>run</goal>
-        </goals>
-      </execution>
-    </executions>
-  </plugin>
-			<plugin>
 				<groupId>com.sun.tools.xjc.maven2</groupId>
 				<artifactId>maven-jaxb-plugin</artifactId>
 				<executions>
@@ -102,7 +83,7 @@
 				</execution>
 				</executions>
 			</plugin>
-	<plugin>
+		<plugin>
 		<artifactId>maven-dependency-plugin</artifactId>
 		<executions>
 			<execution>
