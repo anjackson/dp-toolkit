@@ -3,7 +3,7 @@
               xmlns:xs="http://www.w3.org/2001/XMLSchema">
    <jxb:bindings schemaLocation="premis.xsd" node="/xs:schema">
    	<!--
-<jxb:globalBindings
+    <jxb:globalBindings
     fixedAttributeAsConstantProperty="true"
     collectionType="java.util.Vector"
     typesafeEnumBase="xs:NCName"
@@ -13,29 +13,60 @@
     generateIsSetMethod="false"
     underscoreBinding="asCharInWord"/>
 	-->
-<!--    bindingStyle="elementBinding" modelGroupBinding -->
-<jxb:schemaBindings>
-    <jxb:package name="gov.loc.standards.premis.v2_0">
+    <!--    bindingStyle="elementBinding" modelGroupBinding -->
+    <jxb:schemaBindings>
+     <jxb:package name="gov.loc.standards.premis.v2_0">
         <jxb:javadoc><![CDATA[<body>
 Package level documentation for PREMIS - http://www.loc.gov/standards/premis/schemas.html
 </body>]]>
         </jxb:javadoc>
-    </jxb:package>
-<!--
-    	    <jxb:nameXmlTransform>
-    	<jxb:typeName fred="" suffix="ComplexType"/>
-    </jxb:nameXmlTransform>
-	-->
-</jxb:schemaBindings> 
-
-   <jxb:bindings node="//xs:complexType[@name='premisComplexType']">
-     <jxb:class name="Premis"/>
+     </jxb:package>
+    </jxb:schemaBindings>
+<jxb:bindings node="//xs:complexType[@name='premisComplexType']"><jxb:class name="premis"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='objectComplexType']"><jxb:class name="object"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='eventComplexType']"><jxb:class name="event"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='agentComplexType']"><jxb:class name="agent"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='rightsComplexType']"><jxb:class name="rights"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='agentIdentifierComplexType']"><jxb:class name="agentIdentifier"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='contentLocationComplexType']"><jxb:class name="contentLocation"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='copyrightInformationComplexType']"><jxb:class name="copyrightInformation"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='creatingApplicationComplexType']"><jxb:class name="creatingApplication"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='dependencyComplexType']"><jxb:class name="dependency"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='dependencyIdentifierComplexType']"><jxb:class name="dependencyIdentifier"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='environmentComplexType']"><jxb:class name="environment"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='eventIdentifierComplexType']"><jxb:class name="eventIdentifier"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='eventOutcomeDetailComplexType']"><jxb:class name="eventOutcomeDetail"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='eventOutcomeInformationComplexType']"><jxb:class name="eventOutcomeInformation"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='fixityComplexType']"><jxb:class name="fixity"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='formatComplexType']"><jxb:class name="format"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='formatDesignationComplexType']"><jxb:class name="formatDesignation"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='formatRegistryComplexType']"><jxb:class name="formatRegistry"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='hardwareComplexType']"><jxb:class name="hardware"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='inhibitorsComplexType']"><jxb:class name="inhibitors"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='licenseIdentifierComplexType']"><jxb:class name="licenseIdentifier"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='licenseInformationComplexType']"><jxb:class name="licenseInformation"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='linkingAgentIdentifierComplexType']"><jxb:class name="linkingAgentIdentifier"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='linkingEventIdentifierComplexType']"><jxb:class name="linkingEventIdentifier"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='linkingObjectIdentifierComplexType']"><jxb:class name="linkingObjectIdentifier"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='linkingIntellectualEntityIdentifierComplexType']"><jxb:class name="linkingIntellectualEntityIdentifier"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='linkingRightsStatementIdentifierComplexType']"><jxb:class name="linkingRightsStatementIdentifier"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='objectCharacteristicsComplexType']"><jxb:class name="objectCharacteristics"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='objectIdentifierComplexType']"><jxb:class name="objectIdentifier"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='originalNameComplexType']"><jxb:class name="originalName"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='preservationLevelComplexType']"><jxb:class name="preservationLevel"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='relatedEventIdentificationComplexType']"><jxb:class name="relatedEventIdentification"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='relatedObjectIdentificationComplexType']"><jxb:class name="relatedObjectIdentification"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='relationshipComplexType']"><jxb:class name="relationship"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='rightsGrantedComplexType']"><jxb:class name="rightsGranted"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='rightsStatementComplexType']"><jxb:class name="rightsStatement"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='rightsStatementIdentifierComplexType']"><jxb:class name="rightsStatementIdentifier"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='signatureComplexType']"><jxb:class name="signature"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='signatureInformationComplexType']"><jxb:class name="signatureInformation"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='significantPropertiesComplexType']"><jxb:class name="significantProperties"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='softwareComplexType']"><jxb:class name="software"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='statuteInformationComplexType']"><jxb:class name="statuteInformation"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='storageComplexType']"><jxb:class name="storage"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='termOfGrantComplexType']"><jxb:class name="termOfGrant"/></jxb:bindings>
+<jxb:bindings node="//xs:complexType[@name='extensionComplexType']"><jxb:class name="extension"/></jxb:bindings>
    </jxb:bindings>
-   </jxb:bindings>
-   <!--  This does not work - perhaps just a config problem?:
-[INFO] [jaxb:generate]
-[INFO] Compiling file:/C:/BritishLibrary/Eclipse/workspace-bl/ContentProfiler/BLProfiler/src/main/resources/Agent-v1-1.xsd and others
-[ERROR] [ERROR] XPath evaluation of "//xs:complexType[@name='premis']" results in empty target node
-[ERROR]   line 4 of file:/C:/BritishLibrary/Eclipse/workspace-bl/ContentProfiler/BLProfiler/src/main/resources/Premis-v-1-1.xjb.xml
-    -->
 </jxb:bindings>

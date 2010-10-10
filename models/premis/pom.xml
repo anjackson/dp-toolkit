@@ -76,11 +76,9 @@
 					<includeSchemas>
 						<includeSchema>premis-v1.1/*.xsd</includeSchema>
 					</includeSchemas>
-					<!--
 						<includeBindings>
 							<includeBinding>premis-v1.1/premis.xjb.xml</includeBinding>
 						</includeBindings>
-					-->
 					<strict>true</strict>
 					<verbose>false</verbose>
 				</configuration>

@@ -7,6 +7,7 @@ import gov.loc.standards.premis.v1_1.Agent;
 import gov.loc.standards.premis.v1_1.Event;
 import gov.loc.standards.premis.v1_1.Premis;
 import gov.loc.standards.premis.v1_1.Rights;
+import gov.loc.standards.premis.v1_1.Object;
 import gov.loc.standards.premis.v1_1.Agent.AgentIdentifier;
 import gov.loc.standards.premis.v1_1.Event.EventIdentifier;
 
@@ -33,7 +34,7 @@ public class PremisHelper {
         a.getAgentName().add("bob");
         p.getAgent().add(a);
         
-        gov.loc.standards.premis.v1_1.Object o = new gov.loc.standards.premis.v1_1.Object();
+        Object o = new Object();
         o.setObjectCategory(null);
         p.getObject().add(o);
         

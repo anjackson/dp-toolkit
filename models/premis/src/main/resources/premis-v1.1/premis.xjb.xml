@@ -1,15 +1,11 @@
 <jxb:bindings version="1.0"
               xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
               xmlns:xs="http://www.w3.org/2001/XMLSchema">
-   <jxb:bindings node="//xs:complexType[@name='premis']">
-    <jxb:bindings node=".//xs:element[@ref='object']">
-     <jxb:property name="premisObject"/>
+   <jxb:bindings schemaLocation="Object-v1-1.xsd" node="/xs:schema">
+   	<!--
+    <jxb:bindings node="//xs:element[@name='object']">
+      <jxb:class name="PremisObject"/>
     </jxb:bindings>
-   </jxb:bindings>
-   <!--  This does not work - perhaps just a config problem?:
-[INFO] [jaxb:generate]
-[INFO] Compiling file:/C:/BritishLibrary/Eclipse/workspace-bl/ContentProfiler/BLProfiler/src/main/resources/Agent-v1-1.xsd and others
-[ERROR] [ERROR] XPath evaluation of "//xs:complexType[@name='premis']" results in empty target node
-[ERROR]   line 4 of file:/C:/BritishLibrary/Eclipse/workspace-bl/ContentProfiler/BLProfiler/src/main/resources/Premis-v-1-1.xjb.xml
     -->
+  </jxb:bindings>
 </jxb:bindings>
