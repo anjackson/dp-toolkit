@@ -15,11 +15,9 @@
 	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 	<modules>
-		<!--
-		<module>profiler</module>
-		<module>tools</module>
-		-->
+		<module>applications</module>
 		<module>models</module>
+		<module>tools</module>
 	</modules>
 	<build>
 		<resources>
