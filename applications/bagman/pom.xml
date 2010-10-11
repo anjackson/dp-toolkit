@@ -130,7 +130,6 @@
 			<name>JBoss Repo</name>
 			<url>http://repository.jboss.com/maven2/</url>
 		</repository>
-		-->
         <repository>
             <id>jboss-public-repository-group</id>
             <name>JBoss Public Maven Repository Group</name>
@@ -145,10 +144,11 @@
                 <updatePolicy>never</updatePolicy>
             </snapshots>
         </repository>
+		-->
         <repository>
         	<id>planets-suite-repository</id>
         	<name>The Planets Suite Maven Repository, hosted by SourceForge.</name>
-        	<url>http://planets-suite.sourceforge.net/maven2/</url>
+        	<url>http://planets-suite.sourceforge.net/maven2/releases</url>
             <releases>
                 <enabled>true</enabled>
                 <updatePolicy>never</updatePolicy>
@@ -269,6 +269,8 @@
 			<groupId>loc-repository</groupId>
 			<artifactId>bagit</artifactId>
 			<version>3.6</version>
+			<type>jar</type>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jruby</groupId>
