@@ -1,0 +1,31 @@
+You have content.
+
+Operations are:
+
+Validate
+ - Validate Existing
+ - Validate New Collection
+Exchange
+ - Send
+ - Receive (?)
+
+Validate Existing and Send require selection from list of known collections.
+
+Validate does updates, registers changes, ensures consistency, etc.
+
+
+Or
+
+ Register New Collection
+ Receive New Collection
+ Validate Existing Collection
+ Send Existing Collection
+
+What does the first panel look like?
+
+Okay, I need checksum generation first. 
+So, we need use to point something at a directory, and it should make 
+checksums or re-use existing ones.
+
+ Generate Checksums
+ Validate Checksums

@@ -115,6 +115,51 @@
 	</plugin>
 		</plugins>
 	</build>
+	
+	<repositories>
+	<!--
+		<repository>
+			<id>project</id>
+			<name>Project Repository</name>
+			<url>file:///${basedir}/local-repository</url>
+			<url>file://./../local-repository</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>jboss</id>
+			<name>JBoss Repo</name>
+			<url>http://repository.jboss.com/maven2/</url>
+		</repository>
+		-->
+        <repository>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Maven Repository Group</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </repository>
+        <repository>
+        	<id>planets-suite-repository</id>
+        	<name>The Planets Suite Maven Repository, hosted by SourceForge.</name>
+        	<url>http://planets-suite.sourceforge.net/maven2/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
 
 	<pluginRepositories>
 		<pluginRepository>
@@ -178,12 +223,14 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		<!--
 		<dependency>
-			<groupId>com.lovelycode.dp.tools</groupId>
+			<groupId>net.lovelycode.dp.tools</groupId>
 			<artifactId>fits</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcmail-jdk14</artifactId>
@@ -218,21 +265,17 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>loc-repository</groupId>
+			<artifactId>bagit</artifactId>
+			<version>3.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jruby</groupId>
+			<artifactId>jruby-complete</artifactId>
+			<version>1.5.3</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
-	<repositories>
-		<repository>
-			<id>project</id>
-			<name>Project Repository</name>
-			<!-- 
-			<url>file:///${basedir}/local-repository</url>
-			 -->
-			<url>file://./../local-repository</url>
-			<layout>default</layout>
-		</repository>
-		<repository>
-			<id>jboss</id>
-			<name>JBoss Repo</name>
-			<url>http://repository.jboss.com/maven2/</url>
-		</repository>
-	</repositories>
 </project>
