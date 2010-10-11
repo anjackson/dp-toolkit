@@ -5,6 +5,12 @@
 	<artifactId>dp-toolkit</artifactId>
 	<packaging>pom</packaging>
 	<version>0.0.1-SNAPSHOT</version>
+    <licenses>
+        <license>
+            <name>The GNU General Public Licence v3.0</name>
+            <url>LICENSE.txt</url>
+        </license>
+    </licenses> 
 	<properties>
 	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

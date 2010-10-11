@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
   <name>profiler</name>
   <description>TODO Describe this.</description>
-	<groupId>net.lovelycode.dp.tools</groupId>
-	<artifactId>bitwiser</artifactId>
+	<groupId>net.lovelycode.dp</groupId>
+	<artifactId>profiler</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<parent>
-		<artifactId>tools</artifactId>
+		<artifactId>applications</artifactId>
 		<groupId>net.lovelycode.dp</groupId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
@@ -178,12 +178,14 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		<!--
 		<dependency>
-			<groupId>com.lovelycode.dp.tools</groupId>
+			<groupId>net.lovelycode.dp.tools</groupId>
 			<artifactId>fits</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcmail-jdk14</artifactId>
