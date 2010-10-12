@@ -5,7 +5,6 @@ package net.lovelycode.dp.contentprofiler.profilers;
 
 import static org.junit.Assert.fail;
 
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,11 +27,6 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
-
-import edu.harvard.hul.ois.fits.Fits;
-import edu.harvard.hul.ois.fits.FitsOutput;
-import edu.harvard.hul.ois.fits.exceptions.FitsConfigurationException;
-import edu.harvard.hul.ois.fits.exceptions.FitsException;
 
 /**
  * @author AnJackson
@@ -99,7 +93,10 @@ public class FitsFileProfiler {
         return fo2;
 
       }
-    
+    /*
+     * This code was to invoke FITS internally, without forking a process,
+     * but this proved too much work, as required more-or-less Mavenising FITS and it's dependencies.
+     * 
     private static FitsOutput invokeFits(File in, File out) throws FitsException, IOException {
         System.out.println(FITS_HOME);
         Fits fits = new Fits(FITS_HOME);
@@ -114,6 +111,7 @@ public class FitsFileProfiler {
         fitsOutput.saveToDisk("fitsout.xml");
         return fitsOutput;
     }
+    */
     
     
     private static final int TIMEOUT = 20;

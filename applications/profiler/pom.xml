@@ -178,14 +178,6 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-		<!--
-		<dependency>
-			<groupId>net.lovelycode.dp.tools</groupId>
-			<artifactId>fits</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
-		-->
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcmail-jdk14</artifactId>
@@ -220,6 +212,7 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>edu.harvard.hul.ois.fits</groupId>
 			<artifactId>fits</artifactId>
@@ -227,6 +220,7 @@
 			<scope>system</scope>
 			<systemPath>${basedir}/src/bundles/fits-0.4.2/fits-0.4.2/lib/fits.jar</systemPath>
 		</dependency>
+		 -->
 	</dependencies>
 	<repositories>
 		<repository>
