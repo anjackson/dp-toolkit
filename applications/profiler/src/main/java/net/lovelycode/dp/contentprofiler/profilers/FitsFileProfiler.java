@@ -12,8 +12,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeoutException;
 
 import net.lovelycode.dp.contentprofiler.RuntimeExecutor;
@@ -39,7 +41,8 @@ import edu.harvard.hul.ois.fits.exceptions.FitsException;
 public class FitsFileProfiler {
     static private Logger log = Logger.getLogger(FitsFileProfiler.class);
     
-    static String FITS_HOME = "/Users/anj/Projects/digitalpreservation/dp-toolkit/tools-profilers/fits/src/main/resources";
+    static String FITS_HOME = "src/bundles/fits-0.4.2/fits-0.4.2";
+    static String FITS_SCRIPT = "/fits.bat"; //.sh
     static {
         try {
             FITS_HOME = new File(FITS_HOME).getCanonicalPath();
@@ -125,13 +128,13 @@ public class FitsFileProfiler {
         File fits_home = new File(FITS_HOME);
         
         pb.directory(fits_home);
-        pb.command(FITS_HOME+"/fits.sh","-i", in.getCanonicalPath(), "-o", out.getCanonicalPath());
+        pb.command(FITS_HOME+FITS_SCRIPT,"-i", in.getCanonicalPath(), "-o", out.getCanonicalPath());
 
         RuntimeExecutor r = new RuntimeExecutor(TIMEOUT*1000);
         try {
             String response = r.execute(pb);
         } catch (IOException e) {
-            log.error("Process exception!");
+            log.error("Process exception!\n" + e);
             return fsum;
         } catch (TimeoutException e) {
             log.error("Process did not complete in "+TIMEOUT+"s");
@@ -146,13 +149,13 @@ public class FitsFileProfiler {
         Document dom = saxBuilder.build(br);
         
         // FIXME Write out to temp file? Or Log?
-        //XMLOutputter xo = new XMLOutputter();
-        //xo.output(dom.cloneContent(), System.out);
+        XMLOutputter xo = new XMLOutputter();
+        xo.output(dom.cloneContent(), System.out);
         
         // Do
         Long size = Long.parseLong(extractElement(dom,"size", null));
         if( fsum.getSize() != null && fsum.getSize() != size ) {
-            log.error("Size of object from java.io.File does not match that determined by FITS!");
+        	log.error("Size of object from java.io.File does not match that determined by FITS!");
         }
         fsum.setSize(size);
         fsum.setMd5sum(extractElement(dom,"md5checksum", null));
@@ -184,7 +187,7 @@ public class FitsFileProfiler {
             throw new JDOMException("Element "+field+" not found!");
         }
         */
-        List<String> rl = new ArrayList<String>();
+        Set<String> rl = new HashSet<String>();
         for( Element e : (List<Element>) xp.selectNodes(dom) ) {
             if( attr == null ) {
                 rl.add( e.getTextTrim() );

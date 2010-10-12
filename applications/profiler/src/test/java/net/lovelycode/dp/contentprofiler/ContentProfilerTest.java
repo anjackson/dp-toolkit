@@ -18,9 +18,9 @@ import org.junit.Test;
 public class ContentProfilerTest {
     
     static String[] files = { 
-        "src/test/data/files/world.jp2",
-        "src/test/data/files/chartserver.png",
-        "src/test/data/files/decepticon small_jpg.jpg",
+        "src/test/data/files/WO1_GWHD_1869_01_20-0001.jp2",
+        "src/test/data/files/WO1_GWHD_1869_01_20-0004.tif",
+        "src/test/data/files/WO1_MCLN_1856_12_30-0001.tif",
         "src/test/data/files/Emulation Experiment Integration.odt",
         "src/test/data/files/Emulation Experiment Integration.doc",
     };

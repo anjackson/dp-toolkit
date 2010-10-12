@@ -220,6 +220,13 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>edu.harvard.hul.ois.fits</groupId>
+			<artifactId>fits</artifactId>
+			<version>0.4.2</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/bundles/fits-0.4.2/fits-0.4.2/lib/fits.jar</systemPath>
+		</dependency>
 	</dependencies>
 	<repositories>
 		<repository>
