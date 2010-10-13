@@ -59,7 +59,8 @@ public class FitsFileProfiler {
         
         File out = null;
         try {
-            out = File.createTempFile("contentprofiler", ".tmp.xml");
+        	out = File.createTempFile("contentprofiler", ".tmp.xml");
+            out = new File("contentprofiler.xml");
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
