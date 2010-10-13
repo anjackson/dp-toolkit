@@ -8,6 +8,9 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Properties;
@@ -121,11 +124,12 @@ public class BagMan extends JFrame {
 	    cPnl.add(cancelButton);
 	    bottomPanel.add(cPnl, BorderLayout.WEST);
 	    // Add components to the frame:
+	    jWizardPane.setLayout(new GridLayout(1,1));
 	    add(jWizardPane, BorderLayout.CENTER);
 	    add(bottomPanel, BorderLayout.SOUTH);
-	    //this.setMinimumSize(new Dimension(400,0));
+	    this.setMinimumSize(new Dimension(400,300));
 
-	    this.goToNextStage(new StartStage(properties));
+	    this.goToNextStage(new StartStage(this));
 	    
 	    pack();
 
@@ -152,10 +156,11 @@ public class BagMan extends JFrame {
 	}
 	
 	protected void setStage(WizardStage s) {
-    	jWizardPane.add(s.getWizardPanel(), BorderLayout.CENTER);
+    	jWizardPane.add(s.getPanel(), BorderLayout.CENTER);
     	this.pack();
 	    this.setLocationRelativeTo(null);
 	    this.updateButtons();
+	    this.repaint();
 	}
 	
 	protected void updateButtons() {
@@ -182,7 +187,7 @@ public class BagMan extends JFrame {
     protected void removeCurrentStage() {
 		WizardStage currentStage = this.getCurrentStage();
 		if( currentStage != null ) {
-			jWizardPane.remove(currentStage.getWizardPanel());
+			jWizardPane.remove(currentStage.getPanel());
 		}
     }
     

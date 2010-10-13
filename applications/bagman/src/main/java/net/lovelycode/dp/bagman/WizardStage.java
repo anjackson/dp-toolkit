@@ -1,25 +1,26 @@
 package net.lovelycode.dp.bagman;
 
-import java.util.Properties;
-
 import javax.swing.JPanel;
 
 public abstract class WizardStage {
 	
-	private Properties properties;
+	private final BagMan wizardFrame;
+	
+	private final JPanel panel = new JPanel();
 
-	public WizardStage(Properties properties) {
-		this.properties = properties;
+	public WizardStage(BagMan wizardFrame ) {
+		this.wizardFrame = wizardFrame;
 	}
 	
-	protected Properties getProperties() {
-		return this.properties;
+	public JPanel getPanel() {
+		return panel;
 	}
-
-	abstract public JPanel getWizardPanel();
 	
 	abstract public void validate();
 	
 	abstract public <T extends WizardStage> T getNextStage();
 	
+	protected BagMan getWizardFrame() {
+		return this.wizardFrame;
+	}
 }

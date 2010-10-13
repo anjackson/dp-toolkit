@@ -1,42 +1,100 @@
 package net.lovelycode.dp.bagman;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.List;
 import java.util.Properties;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import net.lovelycode.dp.bagman.cloner.CloneSelectSourceStage;
 
 public class StartStage extends WizardStage {
-
-	private JPanel pnl;
 	
-	public StartStage(Properties properties) {
-		super(properties);
-		// Set up the GUI bits:
-	    pnl = new JPanel();
-	    pnl.setBorder( BorderFactory.createTitledBorder( "Data Carrier Specification" ) );
-	    pnl.setLayout( new GridLayout(3,2));
-	    // Project
-	    pnl.add( new JLabel("Project Identifier:"));
-	    String[] data = {"EAP", "EAP180"};
-	    JComboBox cb = new JComboBox(data);
-	    cb.setEditable( true );
-	    cb.setToolTipText("e.g. EAP180");
-	    pnl.add(cb);
-	    // Carrier
-	    pnl.add( new JLabel("Data Carrier Identification:"));
-	    JTextField textfield1 = new JTextField("Type something here",15);
-	    textfield1.setToolTipText("e.g. Disk #B1-44");
-	    pnl.add(textfield1);
+	int currentSelection = -1;
+	
+	String defaultText = "Please choose an option from this list.";
+	
+	static class WizardChoice {
+		String title;
+		String description;
+		WizardStage nextStage;
+		
+		WizardChoice(String title, String description, WizardStage stage ) {
+			this.title = title;
+			this.description = description;
+			this.nextStage = stage;
+		}
 	}
+	
+	private static List<WizardChoice> choices = new Vector<WizardChoice>();
+	
+	public StartStage(BagMan properties) {
+		super(properties);
+		
+		choices.add( 
+				new WizardChoice("Clone Collection", "Clone Me", new CloneSelectSourceStage(properties))
+				);
+		choices.add( 
+				new WizardChoice("Clone Disk", "Clone a disk", new CloneSelectSourceStage(properties))
+				);
+	
+		// Set up the GUI bits:
+	    getPanel().setBorder( BorderFactory.createTitledBorder( "Choose" ) );
+	    getPanel().setLayout( new GridLayout(0,2));
 
-	@Override
-	public JPanel getWizardPanel() {
-		System.out.println("Getting start panel");
-	    return pnl;
+	    DefaultListModel listModel = new DefaultListModel();
+	    for( WizardChoice c : choices ) {
+	    	listModel.addElement(c.title);
+	    }
+	    final JLabel explanation = new JLabel(defaultText);
+	    explanation.setBorder( BorderFactory.createEmptyBorder(10, 10, 10, 10) );
+	    final JList options = new JList(listModel);
+	    options.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	    options.setBorder( BorderFactory.createLineBorder(Color.BLACK) );
+	    options.addListSelectionListener( new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				currentSelection = options.getSelectedIndex();
+				if( currentSelection >= 0 ) {
+					System.out.println("Got " + currentSelection + " : "+ choices.get(currentSelection).title );
+					explanation.setText(choices.get(currentSelection).description);
+				} else {
+					explanation.setText(defaultText);
+				}
+				getWizardFrame().updateButtons();
+			}
+	    });
+	    getPanel().add(options);
+	    getPanel().add(explanation);
+
+	    /*
+	    JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+                options, );
+	    splitPane.setOneTouchExpandable(false);
+	    //splitPane.setDividerLocation(150);
+	    getPanel().add(splitPane);
+	    
+	    //Provide minimum sizes for the two components in the split pane
+	    Dimension minimumSize = new Dimension(100, 50);
+	    //options.setMinimumSize(minimumSize);
+	    //pictureScrollPane.setMinimumSize(minimumSize);
+		*/
+
 	}
 
 	@Override
@@ -47,7 +105,11 @@ public class StartStage extends WizardStage {
 
 	@Override
 	public <T extends WizardStage> T getNextStage() {
-		return (T) new CloneSelectSourceStage(this.getProperties());
+		if( currentSelection >= 0 ) {
+		return (T) choices.get(currentSelection).nextStage;
+		} else {
+			return null;
+		}
 	}
 
 }
