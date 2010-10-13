@@ -19,6 +19,7 @@ import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 import javax.swing.JButton;
@@ -141,7 +142,14 @@ public class BagMan extends JFrame {
      * 
      */
     protected void doCancel() {
-    	System.exit(0);
+    	int n = JOptionPane.showConfirmDialog(
+    		    this,
+    		    "Are you sure you want to exit?",
+    		    "Are you sure?",
+    		    JOptionPane.YES_NO_OPTION);
+    	if( n == JOptionPane.OK_OPTION ) {
+    		System.exit(0);
+    	}
 	}
 
     /**
