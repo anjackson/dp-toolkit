@@ -30,7 +30,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>net.lovelycode.dp.contentprofiler.ContentProfiler</mainClass>
+							<mainClass>net.lovelycode.dp.bagman.BagMan</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -113,6 +113,15 @@
 			</execution>
 		</executions>
 	</plugin>
+	<plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-eclipse-plugin</artifactId>
+        <version>2.8</version>
+        <configuration>
+          <downloadSources>true</downloadSources>
+          <downloadJavadocs>true</downloadJavadocs>
+        </configuration>
+      </plugin>
 		</plugins>
 	</build>
 	

@@ -4,12 +4,25 @@
 package net.lovelycode.dp.bagman;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.MessageFormat;
+import java.util.List;
+import java.util.Properties;
+import java.util.Vector;
 
+import javax.swing.BorderFactory;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 import javax.swing.JButton;
+import javax.swing.JTextField;
 import javax.swing.JToolBar;
+import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 
 import gov.loc.repository.bagit.Bag;
 import gov.loc.repository.bagit.BagFactory;
@@ -22,20 +35,21 @@ import gov.loc.repository.bagit.driver.CommandLineBagDriver;
 public class BagMan extends JFrame {
 
     private static final long serialVersionUID = 1L;
-    private JPanel jContentPane = null;
-    private JButton jButton = null;
-    private JToolBar jToolBar = null;
-    private JButton jButton1 = null;
+    private JPanel jWizardPane = new JPanel();
+    private JButton nextButton = null;
+    private JButton backButton = null;
+    private JButton cancelButton = null;
+    private Properties properties = new Properties();
+    private List<WizardStage> stages = new Vector<WizardStage>(); 
 
     /**
-     * This is the default constructor
      */
     public BagMan() {
         super();
         initialize();
         BagFactory bf = new BagFactory();
         Bag bag = bf.createBag();
-        bag.addFileToPayload(null);
+        //bag.addFileToPayload(null);
     }
     
     /**
@@ -44,12 +58,20 @@ public class BagMan extends JFrame {
      * @throws Exception
      */
 	public static void main(String[] args) throws Exception {
+		UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
+		BagMan bm = new BagMan();
+	    // Finish up and centre on the screen
+	    bm.setLocationRelativeTo(null);
+		bm.setVisible(true);
+		
+/*
 		CommandLineBagDriver driver = new CommandLineBagDriver();		
 		int ret = driver.execute(args);
 		if (ret == CommandLineBagDriver.RETURN_ERROR) {
 			System.err.println(MessageFormat.format("An error occurred. Check the {0}/logs/bag-{1}.log for more details.", System.getProperty("app.home"), System.getProperty("log.timestamp")));
 		}
 		System.exit(ret);
+		*/
 	}
 
 
@@ -60,8 +82,117 @@ public class BagMan extends JFrame {
      */
     private void initialize() {
         this.setSize(300, 200);
-        this.setContentPane(getJContentPane());
-        this.setTitle("JFrame");
+        this.setTitle("BagMan Data Migration Tool");
+	    setLayout(new BorderLayout());
+	    setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	    
+	    // Navigation
+	    JPanel bottomPanel = new JPanel();
+	    bottomPanel.setLayout(new BorderLayout());
+	    cancelButton = new JButton("Cancel");
+	    cancelButton.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Cancel!");
+				doCancel();
+			}
+		}
+		);
+	    backButton = new JButton("Back");
+	    backButton.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Back!");
+				goToPreviousStage();
+			}
+		}
+		);
+	    nextButton = new JButton("Next");
+	    nextButton.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Next!");
+				goToNextStage(getCurrentStage().getNextStage());
+			}
+		}
+		);
+	    JPanel bcPnl = new JPanel();
+	    bcPnl.add(backButton);
+	    bcPnl.add(nextButton);
+	    bottomPanel.add(bcPnl, BorderLayout.EAST);
+	    JPanel cPnl = new JPanel();
+	    cPnl.add(cancelButton);
+	    bottomPanel.add(cPnl, BorderLayout.WEST);
+	    // Add components to the frame:
+	    add(jWizardPane, BorderLayout.CENTER);
+	    add(bottomPanel, BorderLayout.SOUTH);
+	    //this.setMinimumSize(new Dimension(400,0));
+
+	    this.goToNextStage(new StartStage(properties));
+	    
+	    pack();
+
+    }
+    
+	/**
+     * 
+     */
+    protected void doCancel() {
+    	System.exit(0);
+	}
+
+    /**
+     * 
+     * @param s
+     */
+	protected void goToNextStage(WizardStage nextStage) {
+		// Validate.
+		// Go
+		// Move forward.
+		this.removeCurrentStage();
+		stages.add(nextStage);
+		this.setStage(nextStage);
+	}
+	
+	protected void setStage(WizardStage s) {
+    	jWizardPane.add(s.getWizardPanel(), BorderLayout.CENTER);
+    	this.pack();
+	    this.setLocationRelativeTo(null);
+	    this.updateButtons();
+	}
+	
+	protected void updateButtons() {
+	    if( stages.size() <= 1 ) {
+	    	this.backButton.setEnabled(false);
+	    } else {
+	    	this.backButton.setEnabled(true);
+	    }
+	    if( getCurrentStage().getNextStage() == null ) {
+	    	this.nextButton.setEnabled(false);
+	    } else {
+	    	this.nextButton.setEnabled(true);
+	    }
+	}
+	
+    protected void goToPreviousStage() {
+    	System.out.println("Size: "+stages.size());
+    	if( stages.size() <= 1 ) return;
+    	this.removeCurrentStage();
+    	stages.remove(stages.size()-1);
+    	this.setStage(stages.get(stages.size()-1));
+	}
+    
+    protected void removeCurrentStage() {
+		WizardStage currentStage = this.getCurrentStage();
+		if( currentStage != null ) {
+			jWizardPane.remove(currentStage.getWizardPanel());
+		}
+    }
+    
+    private WizardStage getCurrentStage() {
+		int currentStageIndex = stages.size() - 1;
+		if( currentStageIndex >= 0 ) {
+			return stages.get(currentStageIndex);
+		} else {
+			return null;
+		}
     }
 
     /**
@@ -69,53 +200,15 @@ public class BagMan extends JFrame {
      * 
      * @return javax.swing.JPanel
      */
+    /*
     private JPanel getJContentPane() {
-        if (jContentPane == null) {
-            jContentPane = new JPanel();
-            jContentPane.setLayout(new BorderLayout());
-            jContentPane.add(getJButton(), BorderLayout.SOUTH);
-            jContentPane.add(getJToolBar(), BorderLayout.NORTH);
+        if (jWizardPane == null) {
+            jWizardPane = new JPanel();
+            jWizardPane.setLayout(new BorderLayout());
+            jWizardPane.add(new JButton("One"), BorderLayout.SOUTH);
+            jWizardPane.add(new JToolBar(), BorderLayout.NORTH);
         }
-        return jContentPane;
+        return jWizardPane;
     }
-
-    /**
-     * This method initializes jButton	
-     * 	
-     * @return javax.swing.JButton	
-     */
-    private JButton getJButton() {
-        if (jButton == null) {
-            jButton = new JButton();
-            jButton.setText("Go");
-        }
-        return jButton;
-    }
-
-    /**
-     * This method initializes jToolBar	
-     * 	
-     * @return javax.swing.JToolBar	
-     */
-    private JToolBar getJToolBar() {
-        if (jToolBar == null) {
-            jToolBar = new JToolBar();
-            jToolBar.add(getJButton1());
-        }
-        return jToolBar;
-    }
-
-    /**
-     * This method initializes jButton1	
-     * 	
-     * @return javax.swing.JButton	
-     */
-    private JButton getJButton1() {
-        if (jButton1 == null) {
-            jButton1 = new JButton();
-            jButton1.setText("hel");
-        }
-        return jButton1;
-    }
-
+*/    
 }
