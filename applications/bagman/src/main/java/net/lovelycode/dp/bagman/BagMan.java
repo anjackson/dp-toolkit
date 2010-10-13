@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Properties;
@@ -63,10 +64,15 @@ public class BagMan extends JFrame {
      */
 	public static void main(String[] args) throws Exception {
 		UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
-		BagMan bm = new BagMan();
-	    // Finish up and centre on the screen
-	    bm.setLocationRelativeTo(null);
-		bm.setVisible(true);
+		
+ 		java.awt.EventQueue.invokeLater(new Runnable() {
+	        public void run() {
+	        	BagMan bm = new BagMan();
+	        	// Finish up and centre on the screen
+	        	bm.setLocationRelativeTo(null);
+	        	bm.setVisible(true);		
+	        }
+	    });
 		
 /*
 		CommandLineBagDriver driver = new CommandLineBagDriver();		
@@ -148,7 +154,10 @@ public class BagMan extends JFrame {
     		    "Are you sure?",
     		    JOptionPane.YES_NO_OPTION);
     	if( n == JOptionPane.OK_OPTION ) {
-    		System.exit(0);
+    		// Exit cleanly:
+    		this.processWindowEvent(
+    	            new WindowEvent(
+    	                  this, WindowEvent.WINDOW_CLOSING));
     	}
 	}
 
