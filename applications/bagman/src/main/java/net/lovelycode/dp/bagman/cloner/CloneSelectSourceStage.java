@@ -15,8 +15,7 @@ import net.lovelycode.dp.bagman.WizardStage;
 
 public class CloneSelectSourceStage extends WizardStage {
 
-	public CloneSelectSourceStage(BagMan properties) {
-		super(properties);
+	public CloneSelectSourceStage() {
 	    getPanel().setBorder( BorderFactory.createTitledBorder( "Data Carrier Specification" ) );
 	    getPanel().setLayout( new GridLayout(0,2));
 	    // Project
@@ -32,7 +31,7 @@ public class CloneSelectSourceStage extends WizardStage {
 	    textfield1.setToolTipText("e.g. Disk #B1-44");
 	    getPanel().add(textfield1);
 	}
-
+	
 	@Override
 	public void validate() {
 		// TODO Auto-generated method stub
@@ -40,7 +39,7 @@ public class CloneSelectSourceStage extends WizardStage {
 	}
 
 	@Override
-	public <T extends WizardStage> T getNextStage() {
+	protected WizardStage getNextStage() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -14,8 +14,7 @@ import net.lovelycode.dp.bagman.WizardStage;
 
 public class AccessionMetadataStage extends WizardStage {
 
-	public AccessionMetadataStage(BagMan properties) {
-		super(properties);
+	public AccessionMetadataStage() {
 	    getPanel().setBorder( BorderFactory.createTitledBorder( "Data Carrier Specification" ) );
 	    getPanel().setLayout( new GridLayout(0,2));
 	    // Project
@@ -39,7 +38,7 @@ public class AccessionMetadataStage extends WizardStage {
 	}
 
 	@Override
-	public <T extends WizardStage> T getNextStage() {
+	protected WizardStage getNextStage() {
 		// TODO Auto-generated method stub
 		return null;
 	}

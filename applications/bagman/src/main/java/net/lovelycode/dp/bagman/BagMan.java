@@ -129,7 +129,9 @@ public class BagMan extends JFrame {
 	    add(bottomPanel, BorderLayout.SOUTH);
 	    this.setMinimumSize(new Dimension(400,300));
 
-	    this.goToNextStage(new StartStage(this));
+	    WizardStage stage = new StartStage();
+	    stage.setWizardFrame(this);
+	    this.goToNextStage(stage);
 	    
 	    pack();
 

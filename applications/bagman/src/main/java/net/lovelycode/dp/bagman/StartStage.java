@@ -32,9 +32,9 @@ public class StartStage extends WizardStage {
 	static class WizardChoice {
 		String title;
 		String description;
-		WizardStage nextStage;
+		Class<? extends WizardStage> nextStage;
 		
-		WizardChoice(String title, String description, WizardStage stage ) {
+		WizardChoice(String title, String description, Class<? extends WizardStage> stage ) {
 			this.title = title;
 			this.description = description;
 			this.nextStage = stage;
@@ -43,14 +43,13 @@ public class StartStage extends WizardStage {
 	
 	private static List<WizardChoice> choices = new Vector<WizardChoice>();
 	
-	public StartStage(BagMan properties) {
-		super(properties);
+	public StartStage() {
 		
 		choices.add( 
-				new WizardChoice("Clone Collection", "Clone Me", new CloneSelectSourceStage(properties))
+				new WizardChoice("Clone Collection", "Clone Me", CloneSelectSourceStage.class)
 				);
 		choices.add( 
-				new WizardChoice("Clone Disk", "Clone a disk", new CloneSelectSourceStage(properties))
+				new WizardChoice("Clone Disk", "Clone a disk", CloneSelectSourceStage.class)
 				);
 	
 		// Set up the GUI bits:
@@ -104,12 +103,21 @@ public class StartStage extends WizardStage {
 	}
 
 	@Override
-	public <T extends WizardStage> T getNextStage() {
+	protected WizardStage getNextStage() {
 		if( currentSelection >= 0 ) {
-		return (T) choices.get(currentSelection).nextStage;
-		} else {
-			return null;
+		try {
+			WizardStage ws = choices.get(currentSelection).nextStage.newInstance();
+			ws.setWizardFrame(this.getWizardFrame());
+			return ws;
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		}
+		return null;
 	}
 
 }
