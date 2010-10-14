@@ -34,7 +34,6 @@ import javax.swing.tree.TreePath;
 import org.apache.log4j.Logger;
 
 import net.lovelycode.dp.bagman.BagMan;
-import net.lovelycode.dp.bagman.common.FileSelectionPanel.FileSystemModel;
 
 /**
  * The following code was shamelessly lifted from the Duke Data Accessioner code.
@@ -72,6 +71,8 @@ public class FileSelectionPanel {
 	protected JFrame parent;
 
 	private FileSystemModel fsm;
+	
+	private FileSelectionActionListener fsal;
     
 	/**
 	 */
@@ -160,6 +161,10 @@ public class FileSelectionPanel {
      */
     public FileWrapper getCollectionRoot() {
         return (FileWrapper) fileTree.getModel().getRoot();
+    }
+    
+    public interface FileSelectionActionListener {
+    	public void fileSelectionChanged(FileSystemModel fsm);
     }
 
     /**
@@ -251,6 +256,13 @@ public class FileSelectionPanel {
         }
 
     }
+	
+	/**
+	 * @param fsal
+	 */
+	public void setFileSelectionActionListener( FileSelectionActionListener fsal ) {
+		this.fsal = fsal;
+	}
 
 	/**
 	 * @param source
@@ -348,18 +360,7 @@ public class FileSelectionPanel {
         });
         treeSP.setViewportView(fileTree);
         treeSP.repaint();
-        // Get the disk name:
-        FileWrapper root = ((FileSystemModel)fileTree.getModel()).getRoot();
-        if( root == null ) return;
-        String displayName = FileSystemView.getFileSystemView().
-                getSystemDisplayName(root);
-        displayName = displayName.replaceAll(" \\([A-Z]:\\)$", "");
-        //diskName.setText(displayName);
-        root.showFileInfo();
-	    while(root.getParentFile() != null ) {
-	    	root = new FileWrapper( root.getParentFile().getAbsolutePath() );
-	    	root.showFileInfo();
-	    }
+        fireSelectionListener();
     }
 	
 	/**
@@ -392,6 +393,7 @@ public class FileSelectionPanel {
             if (currentSelection != null) {
                 FileWrapper currentNode =
                         (FileWrapper) currentSelection.getLastPathComponent();
+                // TODO Also add to list of exclusions held here. Roots+Exclusions is the spec.
                 boolean exclude = ! currentNode.isExcluded();
                 currentNode.setExcluded(exclude);
                 if (exclude) {
@@ -408,6 +410,7 @@ public class FileSelectionPanel {
         	fsm.removeRoot();
         }
         fileTree.repaint();
+        fireSelectionListener();
         return;
     }
 
@@ -417,5 +420,9 @@ public class FileSelectionPanel {
 
 	public void openFileAdder() {
 		chooseButton.doClick();
+	}
+	
+	public void fireSelectionListener(){
+        if( fsal != null ) fsal.fileSelectionChanged(fsm);
 	}
 }

@@ -1,8 +1,6 @@
 package net.lovelycode.dp.bagman.common;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -15,6 +13,9 @@ import org.apache.log4j.Logger;
  * @author Seth Shaw, Andrew Jackson
  */
 public class FileWrapper extends File {
+
+	/** */
+	private static final long serialVersionUID = 7248464317896874047L;
 
 	private static Logger log = Logger.getLogger(FileWrapper.class);
 	

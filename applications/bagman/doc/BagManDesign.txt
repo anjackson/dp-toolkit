@@ -1,7 +1,18 @@
 BagMan
-------
+======
 
-A file-based collection manager.
+A file collection manager.
+
+Use cases
+---------
+
+Use case: Cloning a Hard Disk and collecting contextual information.
+I wish to clone a hard disk onto the file-system.
+I also wish to add other files to the collection (e.g. email describing the content).
+
+Use case: Transferring files into bags held on safe storage locations.
+I have a set of files on a disk.
+I wish to transfer them to a network drive, using a bag format at the destination.
 
 Operations
 ----------
@@ -9,9 +20,10 @@ Operations
 1. Create Collection (***)
  - Select files, folders.
  - Choose Collection Type.
- - Choose Destination (in place, known location, etc).
+ - Choose Destination (in place, known location, Folder-In-Collection,  etc).
  - Create...
  - Collect Metadata.
+ -- Disk Label, Notes, Disk Name (Recommended), Type?, User, Date?
  - Record Result?
  - Finish.
 
@@ -39,7 +51,7 @@ Operations
 
 5. Modify Collection (**)
  - Choose Collection(s).
- - Choose Operation: Change Collection Type, (Merge/Split)
+ - Choose Operation: Add Files, Move Files, Remove Files, Change Collection Type(>=1), (Merge/Split)
  - Modify.
  - Record Result?
  - Finish.
