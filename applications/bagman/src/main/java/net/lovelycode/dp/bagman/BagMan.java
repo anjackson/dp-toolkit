@@ -12,6 +12,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Properties;
@@ -52,12 +53,17 @@ public class BagMan extends JFrame {
     public BagMan() {
         super();
         initialize();
-        BagFactory bf = new BagFactory();
-        Bag bag = bf.createBag();
-        //bag.addFileToPayload(null);
     }
     
+    
     /**
+     * @return
+     */
+    protected Properties getProperties() {
+		return properties;
+	}
+
+	/**
      * Example invocation from BagIt sources.
      * @param args
      * @throws Exception
@@ -91,10 +97,39 @@ public class BagMan extends JFrame {
      * @return void
      */
     private void initialize() {
-        this.setSize(300, 200);
-        this.setTitle("BagMan Data Migration Tool");
+	    this.setMinimumSize(new Dimension(500,400));
+        this.setTitle("BagMan Collection Management Tool");
 	    setLayout(new BorderLayout());
-	    setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	    setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+	    this.addWindowListener( new WindowListener() {
+			@Override
+			public void windowActivated(WindowEvent arg0) {
+			}
+
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+			}
+
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				doCancel();
+			}
+
+			@Override
+			public void windowDeactivated(WindowEvent arg0) {
+			}
+
+			@Override
+			public void windowDeiconified(WindowEvent arg0) {
+			}
+
+			@Override
+			public void windowIconified(WindowEvent arg0) {
+			}
+
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+			}});
 	    
 	    // Navigation
 	    JPanel bottomPanel = new JPanel();
@@ -134,7 +169,6 @@ public class BagMan extends JFrame {
 	    jWizardPane.setLayout(new GridLayout(1,1));
 	    add(jWizardPane, BorderLayout.CENTER);
 	    add(bottomPanel, BorderLayout.SOUTH);
-	    this.setMinimumSize(new Dimension(400,300));
 
 	    WizardStage stage = new StartStage();
 	    stage.setWizardFrame(this);
@@ -154,10 +188,7 @@ public class BagMan extends JFrame {
     		    "Are you sure?",
     		    JOptionPane.YES_NO_OPTION);
     	if( n == JOptionPane.OK_OPTION ) {
-    		// Exit cleanly:
-    		this.processWindowEvent(
-    	            new WindowEvent(
-    	                  this, WindowEvent.WINDOW_CLOSING));
+			dispose();
     	}
 	}
 

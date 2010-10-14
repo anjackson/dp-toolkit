@@ -1,31 +1,61 @@
-You have content.
+BagMan
+------
 
-Operations are:
+A file-based collection manager.
 
-Validate
- - Validate Existing
- - Validate New Collection
-Exchange
- - Send
- - Receive (?)
+Operations
+----------
 
-Validate Existing and Send require selection from list of known collections.
+1. Create Collection (***)
+ - Select files, folders.
+ - Choose Collection Type.
+ - Choose Destination (in place, known location, etc).
+ - Create...
+ - Collect Metadata.
+ - Record Result?
+ - Finish.
 
-Validate does updates, registers changes, ensures consistency, etc.
+2. Clone Collection (**)
+ - Choose Collection(s).
+ - Choose Destination.
+ - (Choose new Collection Type)
+ - Clone.
+ - Record Result?
+ - Finish.
+ 
+3. Validate Collection (***)
+ - Choose Collection(s).
+ - Validate.
+ - (Review Changes?)
+ - Record Result?
+ - Finish.
 
+4. Analyse Collection (**)
+ - Choose Collection(s).
+ - Choose Analysis Tools (DROID etc).
+ - Analyse.
+ - Review/Export Results.
+ - Finish.
 
-Or
+5. Modify Collection (**)
+ - Choose Collection(s).
+ - Choose Operation: Change Collection Type, (Merge/Split)
+ - Modify.
+ - Record Result?
+ - Finish.
 
- Register New Collection
- Receive New Collection
- Validate Existing Collection
- Send Existing Collection
+6. Send Collection (*)
+ - Choose Collection(s)
+ - Choose Remote Destination...
+ 
+7. Receive Collection (*)
+ - Choose source (URL? Bag? Email? What?)
+ - Choose Destination.
 
-What does the first panel look like?
+Notes
+-----
 
-Okay, I need checksum generation first. 
-So, we need use to point something at a directory, and it should make 
-checksums or re-use existing ones.
+All 'Choose Collection(s)' require selection from list of known collections.
 
- Generate Checksums
- Validate Checksums
+Priority is indicated by number of stars.
+

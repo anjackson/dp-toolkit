@@ -21,7 +21,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import net.lovelycode.dp.bagman.cloner.CloneSelectSourceStage;
+import net.lovelycode.dp.bagman.clone.CloneSelectSourceStage;
+import net.lovelycode.dp.bagman.create.CreateSelectSourceStage;
 
 public class StartStage extends WizardStage {
 	
@@ -46,10 +47,15 @@ public class StartStage extends WizardStage {
 	public StartStage() {
 		
 		choices.add( 
-				new WizardChoice("Clone Collection", "Clone Me", CloneSelectSourceStage.class)
+				new WizardChoice(
+						"Create Collection", 
+						"Create a Collection from a folder, set of files, a disk, or other source.", 
+						CreateSelectSourceStage.class)
 				);
 		choices.add( 
-				new WizardChoice("Clone Disk", "Clone a disk", CloneSelectSourceStage.class)
+				new WizardChoice(
+						"Clone Collection", 
+						"Clone an existing Collection", CloneSelectSourceStage.class)
 				);
 	
 		// Set up the GUI bits:
@@ -80,19 +86,6 @@ public class StartStage extends WizardStage {
 	    });
 	    getPanel().add(options);
 	    getPanel().add(explanation);
-
-	    /*
-	    JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                options, );
-	    splitPane.setOneTouchExpandable(false);
-	    //splitPane.setDividerLocation(150);
-	    getPanel().add(splitPane);
-	    
-	    //Provide minimum sizes for the two components in the split pane
-	    Dimension minimumSize = new Dimension(100, 50);
-	    //options.setMinimumSize(minimumSize);
-	    //pictureScrollPane.setMinimumSize(minimumSize);
-		*/
 
 	}
 

@@ -1,4 +1,4 @@
-package net.lovelycode.dp.bagman.cloner;
+package net.lovelycode.dp.bagman.clone;
 
 import java.awt.GridLayout;
 import java.util.Properties;
