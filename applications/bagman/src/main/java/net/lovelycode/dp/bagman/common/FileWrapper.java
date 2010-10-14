@@ -1,4 +1,4 @@
-package net.lovelycode.dp.bagman.create;
+package net.lovelycode.dp.bagman.common;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -6,12 +6,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.swing.filechooser.FileSystemView;
+
+import org.apache.log4j.Logger;
+
 /**
  *
- * @author Seth Shaw
+ * @author Seth Shaw, Andrew Jackson
  */
 public class FileWrapper extends File {
 
+	private static Logger log = Logger.getLogger(FileWrapper.class);
+	
     private FileWrapper parentMetadata;
     private String newName = null;
     private TreeMap<String, FileWrapper> childrenMetadata;
@@ -171,4 +177,17 @@ public class FileWrapper extends File {
         }
         return this.delete();
     }
+    
+	public void showFileInfo( ) {
+    	log.info("--- "+this);
+	    log.info("Got '"+FileSystemView.getFileSystemView().getSystemDisplayName(this) + 
+	    			"' ["+FileSystemView.getFileSystemView().getSystemTypeDescription(this)+"]");
+	    if( FileSystemView.getFileSystemView().isComputerNode(this) ) log.info("A computer ");
+	    if( FileSystemView.getFileSystemView().isDrive(this) ) log.info("A drive ");
+	    if( FileSystemView.getFileSystemView().isFileSystem(this) ) log.info("A FS ");
+	    if( FileSystemView.getFileSystemView().isFileSystemRoot(this) ) log.info("A FS Root ");
+	    if( FileSystemView.getFileSystemView().isFloppyDrive(this) ) log.info("A floppy ");
+	    if( FileSystemView.getFileSystemView().isHiddenFile(this) ) log.info("Is hidden ");
+	}
+
 }
