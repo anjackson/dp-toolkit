@@ -3,6 +3,8 @@ package net.lovelycode.dp.bagman.clone;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.File;
 import java.util.Properties;
 
@@ -19,6 +21,8 @@ import net.lovelycode.dp.bagman.WizardStage;
 
 public class CloneSelectSourceStage extends WizardStage {
 
+	private JButton chooseButton;
+
 	public CloneSelectSourceStage() {
 	    getPanel().setBorder( BorderFactory.createTitledBorder( "Data Carrier Specification" ) );
 	    getPanel().setLayout( new GridLayout(3,2));
@@ -34,7 +38,7 @@ public class CloneSelectSourceStage extends WizardStage {
 	    JTextField textfield1 = new JTextField("Type something here",15);
 	    textfield1.setToolTipText("e.g. Disk #B1-44");
 	    getPanel().add(textfield1);
-	    JButton chooseButton = new JButton("Choose");
+	    chooseButton = new JButton("Choose");
 	    getPanel().add(chooseButton);
 	    chooseButton.addActionListener( new ActionListener() {
 			@Override
@@ -61,7 +65,7 @@ public class CloneSelectSourceStage extends WizardStage {
 			            
 			    }
 			}});
-
+	    
 	}
 	
 	@Override
@@ -72,6 +76,7 @@ public class CloneSelectSourceStage extends WizardStage {
 
 	@Override
 	protected WizardStage getNextStage() {
+		System.out.println("Get Next...");
 		// TODO Auto-generated method stub
 		return null;
 	}

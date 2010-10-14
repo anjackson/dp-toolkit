@@ -23,11 +23,15 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.apache.log4j.Logger;
+
 import net.lovelycode.dp.bagman.clone.CloneSelectSourceStage;
 import net.lovelycode.dp.bagman.create.CreateSelectSourceStage;
 import net.lovelycode.dp.bagman.validate.ValidateSelectSourceStage;
 
 public class StartStage extends WizardStage {
+	
+	private static Logger log = Logger.getLogger(StartStage.class);
 	
 	int currentSelection = -1;
 	
@@ -90,7 +94,7 @@ public class StartStage extends WizardStage {
 			public void valueChanged(ListSelectionEvent e) {
 				currentSelection = options.getSelectedIndex();
 				if( currentSelection >= 0 ) {
-					System.out.println("Got " + currentSelection + " : "+ choices.get(currentSelection).title );
+					log.info("Got " + currentSelection + " : "+ choices.get(currentSelection).title );
 					explanation.setText(choices.get(currentSelection).description);
 				} else {
 					explanation.setText(defaultText);
@@ -106,7 +110,9 @@ public class StartStage extends WizardStage {
 	@Override
 	public void validate() {
 		// TODO Auto-generated method stub
-
+		if( currentSelection < -1 ) {
+			log.error("Nothing selected!");
+		}
 	}
 
 	@Override

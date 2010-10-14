@@ -1,11 +1,15 @@
 package net.lovelycode.dp.bagman.create;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -33,7 +37,10 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+import org.apache.log4j.Logger;
+
 import net.lovelycode.dp.bagman.BagMan;
+import net.lovelycode.dp.bagman.StartStage;
 import net.lovelycode.dp.bagman.WizardStage;
 
 /**
@@ -44,7 +51,11 @@ import net.lovelycode.dp.bagman.WizardStage;
  */
 public class CreateSelectSourceStage extends WizardStage {
 
+	private static Logger log = Logger.getLogger(CreateSelectSourceStage.class);
+	
 	private JTree fileTree;
+	
+	private boolean shown = false;
 
 	public CreateSelectSourceStage() {
 	    getPanel().setBorder( BorderFactory.createTitledBorder( "Choose Source Files & Folders" ) );
@@ -69,7 +80,7 @@ public class CreateSelectSourceStage extends WizardStage {
 	    JPanel selectionButtons = new JPanel();
 	    selectionButtons.setLayout(new GridLayout(1,2));
 	    tools.add(selectionButtons, BorderLayout.WEST);
-	    JButton chooseButton = new JButton(this.getIcon("resources/plus-8.png", "Add files to this collection."));
+	    chooseButton = new JButton(this.getIcon("resources/plus-8.png", "Add files to this collection."));
 	    selectionButtons.add(chooseButton);
 	    chooseButton.addActionListener( new ActionListener() {
 			@Override
@@ -100,7 +111,13 @@ public class CreateSelectSourceStage extends WizardStage {
 	    JButton minusButton = new JButton(this.getIcon("resources/minus-8.png", "Remove files from this collection.") );
 	    selectionButtons.add(minusButton);
 	    // Change icon when selecting rather than managing root folders.
-	    //minusButton.setIcon(excludeHiddenIcon);
+	    minusButton.setIcon(excludeHiddenIcon);
+	    // Toggle selection status.
+	    minusButton.addActionListener( new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				toggleExcluded();
+			}} );
 	    
 	    // Add add the configuration menu button
 	    JButton configButton = new JButton("@");
@@ -125,7 +142,9 @@ public class CreateSelectSourceStage extends WizardStage {
 		    //pictureScrollPane.setMinimumSize(minimumSize);
 	     */
 
-
+	    // Now auto-fire the Add operation:
+	    // Fails because these are constructed before being shown.
+	    //chooseButton.doClick();
 	}
 	
 	@Override
@@ -136,6 +155,13 @@ public class CreateSelectSourceStage extends WizardStage {
 
 	@Override
 	protected WizardStage getNextStage() {
+		// The first time this page is seen, auto-press the button to select files.
+		// FIXME This is a rather ugly way of achieving this functionality.
+		if( shown == false ) {
+			chooseButton.doClick();
+			shown = true;
+		}
+
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -144,6 +170,9 @@ public class CreateSelectSourceStage extends WizardStage {
 	/**
 	 * The following code was shamelessly lifted from the Duke Data Accessioner code.
 	 * (BSD-style licence)
+	 * 
+	 * TODO Add menu to control size and date show/hide.
+	 * TODO Allow items to be dragged onto the pane.
 	 */
     private boolean displaySize = false;
     private boolean displayLastModified = false;
@@ -152,6 +181,7 @@ public class CreateSelectSourceStage extends WizardStage {
     private JTextField diskName;
     private static DateFormat dateFormat =
         new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+	private JButton chooseButton;
     
     /** Returns an ImageIcon, or null if the path was invalid. */
     protected ImageIcon getIcon(String path,
@@ -271,12 +301,19 @@ public class CreateSelectSourceStage extends WizardStage {
                     int row,
                     boolean hasFocus) {
 
+                FileWrapper nodeInfo = (FileWrapper) value;
+
+                // Set colour:
+                if (nodeInfo.isExcluded()) {
+                	this.setTextNonSelectionColor(Color.LIGHT_GRAY);
+                } else {
+                	this.setTextNonSelectionColor(Color.BLACK);
+                }
+                	
                 super.getTreeCellRendererComponent(
                         tree, value, sel,
                         expanded, leaf, row,
                         hasFocus);
-
-                FileWrapper nodeInfo = (FileWrapper) value;
 
                 //Set ToolTip
                 if (nodeInfo.isDirectory()) {
@@ -312,7 +349,25 @@ public class CreateSelectSourceStage extends WizardStage {
                 getSystemDisplayName(source);
         displayName = displayName.replaceAll(" \\([A-Z]:\\)$", "");
         diskName.setText(displayName);
+        showFileInfo(source);
+        File root = source;
+	    while(root.getParentFile() != null ) {
+	    	root = root.getParentFile();
+	    	showFileInfo(root);
+	    }
     }
+	
+	private void showFileInfo( File root ) {
+    	log.info("--- "+root);
+	    log.info("Got '"+FileSystemView.getFileSystemView().getSystemDisplayName(root) + 
+	    			"' ["+FileSystemView.getFileSystemView().getSystemTypeDescription(root)+"]");
+	    if( FileSystemView.getFileSystemView().isComputerNode(root) ) log.info("A computer ");
+	    if( FileSystemView.getFileSystemView().isDrive(root) ) log.info("A drive ");
+	    if( FileSystemView.getFileSystemView().isFileSystem(root) ) log.info("A FS ");
+	    if( FileSystemView.getFileSystemView().isFileSystemRoot(root) ) log.info("A FS root ");
+	    if( FileSystemView.getFileSystemView().isFloppyDrive(root) ) log.info("A floppy ");
+	    if( FileSystemView.getFileSystemView().isHiddenFile(root) ) log.info("Is hidden ");
+	}
 	
     protected static String prettySize(Long size) {
         String prettySize = "";
@@ -333,5 +388,21 @@ public class CreateSelectSourceStage extends WizardStage {
         return prettySize;
     }
     
+    public void toggleExcluded() {
+        TreePath[] currentSelections = fileTree.getSelectionPaths();
+        for (TreePath currentSelection : currentSelections) {
+            if (currentSelection != null) {
+                FileWrapper currentNode =
+                        (FileWrapper) currentSelection.getLastPathComponent();
+                boolean exclude = ! currentNode.isExcluded();
+                currentNode.setExcluded(exclude);
+                if (exclude) {
+                    fileTree.collapsePath(currentSelection);
+                }
+            }
+        }
+        fileTree.repaint();
+        return;
+    }
 
 }
