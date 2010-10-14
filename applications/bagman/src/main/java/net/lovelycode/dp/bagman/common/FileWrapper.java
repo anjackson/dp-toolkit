@@ -47,7 +47,11 @@ public class FileWrapper extends File {
     }
 
 
-    public Map getChecksums(){
+    public FileWrapper(File selectedFile) {
+    	this(selectedFile.getAbsolutePath());
+	}
+
+	public Map getChecksums(){
         return checksums;
     }
     

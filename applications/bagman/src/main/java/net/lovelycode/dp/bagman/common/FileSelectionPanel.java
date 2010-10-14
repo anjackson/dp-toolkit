@@ -34,6 +34,7 @@ import javax.swing.tree.TreePath;
 import org.apache.log4j.Logger;
 
 import net.lovelycode.dp.bagman.BagMan;
+import net.lovelycode.dp.bagman.common.FileSelectionPanel.FileSystemModel;
 
 /**
  * The following code was shamelessly lifted from the Duke Data Accessioner code.
@@ -69,6 +70,8 @@ public class FileSelectionPanel {
 
 	/** */
 	protected JFrame parent;
+
+	private FileSystemModel fsm;
     
 	/**
 	 */
@@ -116,7 +119,7 @@ public class FileSelectionPanel {
 			        	System.out.print(" "+f);
 			       }
 			       System.out.println(" ");
-			       createTree(chooser.getSelectedFile());
+			       fsm.addRoot(chooser.getSelectedFile());
 			    }
 			}});
 	    // And the removal button
@@ -135,8 +138,9 @@ public class FileSelectionPanel {
 	    JButton configButton = new JButton("@");
 	    tools.add(configButton, BorderLayout.EAST);
 
-	    // Create an empty tree:
-	    createTree(null);
+		// Create Source:
+        fsm = new FileSystemModel();
+	    createTree();
 	}
 
     /** Returns an ImageIcon, or null if the path was invalid. */
@@ -154,7 +158,7 @@ public class FileSelectionPanel {
     /**
      * @return
      */
-    private FileWrapper getSourceMetadata() {
+    public FileWrapper getCollectionRoot() {
         return (FileWrapper) fileTree.getModel().getRoot();
     }
 
@@ -175,7 +179,17 @@ public class FileSelectionPanel {
             this(System.getProperty("user.home"));
         }
 
-        public FileSystemModel(String startPath) {
+        public void addRoot(File selectedFile) {
+        	this.root = new FileWrapper( selectedFile );
+        	createTree();
+		}
+
+		public void removeRoot() {
+			root = null;
+        	createTree();
+		}
+		
+		public FileSystemModel(String startPath) {
             root = new FileWrapper(startPath);
         }
         
@@ -235,13 +249,18 @@ public class FileSelectionPanel {
         public void removeTreeModelListener(TreeModelListener l) {
             treeModelListeners.removeElement(l);
         }
+
     }
 
 	/**
 	 * @param source
 	 */
-	private void createTree(File source) {
-        fileTree = new JTree(new FileSystemModel(source)) {
+	private void createTree() {
+        // Create Tree
+        fileTree = new JTree(fsm) {
+
+			/** */
+			private static final long serialVersionUID = -7186397845778237235L;
 
 			@Override
             public String convertValueToText(Object value, boolean selected,
@@ -271,7 +290,12 @@ public class FileSelectionPanel {
         fileTree.putClientProperty("JTree.lineStyle", "Angled");
         fileTree.setCellRenderer(new DefaultTreeCellRenderer() {
 
-            @Override
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = -1208838104381323762L;
+
+			@Override
             public Component getTreeCellRendererComponent(
                     JTree tree,
                     Object value,
@@ -381,7 +405,7 @@ public class FileSelectionPanel {
         }
         // Empty the display if a root is removed.
         if( removedRoot ) {
-        	createTree(null);
+        	fsm.removeRoot();
         }
         fileTree.repaint();
         return;
