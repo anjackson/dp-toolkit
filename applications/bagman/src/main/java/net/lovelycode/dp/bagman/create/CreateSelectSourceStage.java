@@ -49,6 +49,15 @@ public class CreateSelectSourceStage extends WizardStage {
 	public CreateSelectSourceStage() {
 	    getPanel().setBorder( BorderFactory.createTitledBorder( "Choose Source Files & Folders" ) );
 	    getPanel().setLayout( new GridLayout(1,1));
+
+	    // Get the icons.
+	    excludeIcon = getIcon("resources/banned-16.png","Exclude");
+	    fileIcon = getIcon("resources/page.gif","File");
+	    folderIcon = getIcon("resources/folder.gif","Folder");
+	    excludeHiddenIcon = getIcon("resources/banned-16-grey.png","Exclude Hidden");
+	    fileHiddenIcon = getIcon("resources/page_hidden.gif","File Hidden");
+	    folderHiddenIcon = getIcon("resources/folder_hidden.gif","Folder Hidden");
+
 	    // File Selector
 	    JPanel selector = new JPanel();
 	    selector.setLayout( new BorderLayout() );
@@ -60,7 +69,7 @@ public class CreateSelectSourceStage extends WizardStage {
 	    JPanel selectionButtons = new JPanel();
 	    selectionButtons.setLayout(new GridLayout(1,2));
 	    tools.add(selectionButtons, BorderLayout.WEST);
-	    JButton chooseButton = new JButton("+");
+	    JButton chooseButton = new JButton(this.getIcon("resources/plus-8.png", "Add files to this collection."));
 	    selectionButtons.add(chooseButton);
 	    chooseButton.addActionListener( new ActionListener() {
 			@Override
@@ -88,8 +97,10 @@ public class CreateSelectSourceStage extends WizardStage {
 			    }
 			}});
 	    // And the removal button
-	    JButton minusButton = new JButton("-");
+	    JButton minusButton = new JButton(this.getIcon("resources/minus-8.png", "Remove files from this collection.") );
 	    selectionButtons.add(minusButton);
+	    // Change icon when selecting rather than managing root folders.
+	    //minusButton.setIcon(excludeHiddenIcon);
 	    
 	    // Add add the configuration menu button
 	    JButton configButton = new JButton("@");
@@ -113,14 +124,6 @@ public class CreateSelectSourceStage extends WizardStage {
 		    //options.setMinimumSize(minimumSize);
 		    //pictureScrollPane.setMinimumSize(minimumSize);
 	     */
-
-	    // Get the icons.
-	    excludeIcon = getIcon("resources/action_stop.gif","Exclude");
-	    fileIcon = getIcon("resources/page.gif","File");
-	    folderIcon = getIcon("resources/folder.gif","Folder");
-	    excludeHiddenIcon = getIcon("resources/action_stop_hidden.gif","Exclude Hidden");
-	    fileHiddenIcon = getIcon("resources/page_hidden.gif","File Hidden");
-	    folderHiddenIcon = getIcon("resources/folder_hidden.gif","Folder Hidden");
 
 
 	}
