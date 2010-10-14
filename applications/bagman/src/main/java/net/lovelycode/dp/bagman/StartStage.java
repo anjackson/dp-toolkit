@@ -11,10 +11,12 @@ import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
@@ -23,6 +25,7 @@ import javax.swing.event.ListSelectionListener;
 
 import net.lovelycode.dp.bagman.clone.CloneSelectSourceStage;
 import net.lovelycode.dp.bagman.create.CreateSelectSourceStage;
+import net.lovelycode.dp.bagman.validate.ValidateSelectSourceStage;
 
 public class StartStage extends WizardStage {
 	
@@ -54,8 +57,13 @@ public class StartStage extends WizardStage {
 				);
 		choices.add( 
 				new WizardChoice(
+						"Validate Collection", 
+						"Validate an existing Collection.", null ) //ValidateSelectSourceStage.class)
+				);
+		choices.add( 
+				new WizardChoice(
 						"Clone Collection", 
-						"Clone an existing Collection", CloneSelectSourceStage.class)
+						"Clone an existing Collection.", null ) //CloneSelectSourceStage.class)
 				);
 	
 		// Set up the GUI bits:
@@ -66,8 +74,14 @@ public class StartStage extends WizardStage {
 	    for( WizardChoice c : choices ) {
 	    	listModel.addElement(c.title);
 	    }
-	    final JLabel explanation = new JLabel(defaultText);
-	    explanation.setBorder( BorderFactory.createEmptyBorder(10, 10, 10, 10) );
+	    final JEditorPane explanation = new JEditorPane();
+	    explanation.setBorder( BorderFactory.createEmptyBorder(0, 10, 0, 10) );
+	    explanation.setContentType("text/plain");
+	    explanation.setOpaque(false);
+	    explanation.setEditable(false);
+	    explanation.setFocusable(false);
+	    explanation.setText(defaultText);
+
 	    final JList options = new JList(listModel);
 	    options.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	    options.setBorder( BorderFactory.createLineBorder(Color.BLACK) );
@@ -98,17 +112,19 @@ public class StartStage extends WizardStage {
 	@Override
 	protected WizardStage getNextStage() {
 		if( currentSelection >= 0 ) {
-		try {
-			WizardStage ws = choices.get(currentSelection).nextStage.newInstance();
-			ws.setWizardFrame(this.getWizardFrame());
-			return ws;
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			try {
+				Class<? extends WizardStage> wsClass = choices.get(currentSelection).nextStage;
+				if( wsClass == null ) return null;
+				WizardStage ws = wsClass.newInstance();
+				ws.setWizardFrame(this.getWizardFrame());
+				return ws;
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
