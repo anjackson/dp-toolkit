@@ -154,6 +154,7 @@
             </snapshots>
         </repository>
 		-->
+		<!-- 
         <repository>
         	<id>planets-suite-repository</id>
         	<name>The Planets Suite Maven Repository, hosted by SourceForge.</name>
@@ -167,6 +168,7 @@
                 <updatePolicy>never</updatePolicy>
             </snapshots>
         </repository>
+		 -->
     </repositories>
 
 
@@ -275,7 +277,7 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>loc-repository</groupId>
+			<groupId>gov.loc</groupId>
 			<artifactId>bagit</artifactId>
 			<version>3.6</version>
 			<type>jar</type>
