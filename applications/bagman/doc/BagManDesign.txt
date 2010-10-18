@@ -14,53 +14,61 @@ Use case: Transferring files into bags held on safe storage locations.
 I have a set of files on a disk.
 I wish to transfer them to a network drive, using a bag format at the destination.
 
-Operations
-----------
+Interface
+---------
+The term 'Collection' is used to describe any set of files, from a simple folder 
+to a BagIt bag. The interface should present some simple preservation actions 
+that can be applied to Collections. Under the hood, the same 'action' 
+might map to one of a number of different operations, depending on the Collection Type.
 
-1. Create Collection (***)
- - Select files, folders.
- - Choose Collection Type.
- - Choose Destination (in place, known location, Folder-In-Collection,  etc).
+
+Actions
+-------
+
+1. Checksum (**)
+ - Choose files, folders or from known Collection(s).
+ - Choose Destination.
+ - Choose target Collection Type.
  - Create...
  - Collect Metadata.
  -- Disk Label, Notes, Disk Name (Recommended), Type?, User, Date?
  - Record Result?
  - Finish.
 
-2. Clone Collection (**)
- - Choose Collection(s).
- - Choose Destination.
- - (Choose new Collection Type)
- - Clone.
- - Record Result?
- - Finish.
- 
-3. Validate Collection (***)
+2. Validate (**)
  - Choose Collection(s).
  - Validate.
  - (Review Changes?)
  - Record Result?
  - Finish.
 
-4. Analyse Collection (**)
+3. Clone (***)
+ - Choose files, folders or from known Collection(s).
+ - Choose Destination (in place, known location, Folder-In-Collection,  etc).
+ - Choose target Collection Type.
+ - Clone.
+ - Record Result?
+ - Finish.
+ 
+4. Analyse (**)
  - Choose Collection(s).
  - Choose Analysis Tools (DROID etc).
  - Analyse.
  - Review/Export Results.
  - Finish.
 
-5. Modify Collection (**)
+5. Modify (**)
  - Choose Collection(s).
- - Choose Operation: Add Files, Move Files, Remove Files, Change Collection Type(>=1), (Merge/Split)
+ - Choose Operation: Add Files, Move Files, Remove Files, Change Collection Type(>=1), (Add Metadata?), (Merge/Split?)
  - Modify.
  - Record Result?
  - Finish.
 
-6. Send Collection (*)
+6. Send (*)
  - Choose Collection(s)
  - Choose Remote Destination...
  
-7. Receive Collection (*)
+7. Receive (*)
  - Choose source (URL? Bag? Email? What?)
  - Choose Destination.
 

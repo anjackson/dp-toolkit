@@ -55,19 +55,21 @@ public class StartStage extends WizardStage {
 		
 		choices.add( 
 				new WizardChoice(
-						"Create Collection", 
-						"Create a Collection from a folder, set of files, a disk, or other source.", 
-						CreateSelectSourceStage.class)
+						"Checksum", 
+						"Calculate checksums for a collection of files.", 
+						null ) //CreateSelectSourceStage.class)
 				);
 		choices.add( 
 				new WizardChoice(
-						"Validate Collection", 
-						"Validate an existing Collection.", null ) //ValidateSelectSourceStage.class)
+						"Validate", 
+						"Validate the checksums associated with a collection of files.", 
+						null ) //ValidateSelectSourceStage.class)
 				);
 		choices.add( 
 				new WizardChoice(
-						"Clone Collection", 
-						"Clone an existing Collection.", null ) //CloneSelectSourceStage.class)
+						"Clone", 
+						"Clone an existing collection of files, placing a verified copy of the material in a new location.", 
+						CloneSelectSourceStage.class)
 				);
 	
 		// Set up the GUI bits:
