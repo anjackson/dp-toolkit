@@ -62,7 +62,7 @@ public class FileSelectionPanel {
     private boolean displaySize = false;
     private boolean displayLastModified = false;
     private JScrollPane treeSP;
-    private Icon excludeIcon,  fileIcon,  folderIcon,  excludeHiddenIcon,  fileHiddenIcon,  folderHiddenIcon;
+    private Icon excludeIcon,  fileIcon,  folderIcon,  excludeHiddenIcon,  fileHiddenIcon,  folderHiddenIcon, favIcon;
     private static DateFormat dateFormat =
         new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 	private JButton chooseButton;
@@ -85,6 +85,7 @@ public class FileSelectionPanel {
 	    excludeHiddenIcon = getIcon("resources/banned-16-grey.png","Exclude Hidden");
 	    fileHiddenIcon = getIcon("resources/page_hidden.gif","File Hidden");
 	    folderHiddenIcon = getIcon("resources/folder_hidden.gif","Folder Hidden");
+	    favIcon = getIcon("resources/heart-grey.png", "Favourites");
 
 	    panel = new JPanel();
 	    panel.setLayout( new BorderLayout() );
@@ -135,6 +136,9 @@ public class FileSelectionPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				toggleExcluded();
 			}} );
+	    // Add the Favourites icon
+	    JButton favButton = new JButton( favIcon );
+	    selectionButtons.add(favButton);
 	    minusButton.putClientProperty( "JButton.buttonType", "textured" );
 
 	    // Add add the configuration menu button
@@ -392,6 +396,7 @@ public class FileSelectionPanel {
      */
     public void toggleExcluded() {
         TreePath[] currentSelections = fileTree.getSelectionPaths();
+        if( currentSelections == null || currentSelections.length == 0 ) return;
         boolean removedRoot = false;
         for (TreePath currentSelection : currentSelections) {
             if (currentSelection != null) {
