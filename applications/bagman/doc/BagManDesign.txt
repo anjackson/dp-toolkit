@@ -46,6 +46,7 @@ Actions
  - Choose files, folders or from known Collection(s).
  - Choose Destination (in place, known location, Folder-In-Collection,  etc).
  - Choose target Collection Type.
+ - Enter additional metadata?
  - Clone.
  - Record Result?
  - Finish.
