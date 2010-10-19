@@ -12,5 +12,6 @@
 	</parent>
 	<modules>
 		<module>bitwiser</module>
+		<module>nanite</module>
 	</modules>
 </project>
