@@ -1,18 +1,19 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>tools</artifactId>
-    <groupId>net.lovelycode.dp</groupId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <groupId>net.lovelycode.dp.tools</groupId>
-  <artifactId>nanite</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>Nanite</name>
-  <description>A tiny droid.</description>
-  <build>
-  <plugins>
-	<plugin>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>tools</artifactId>
+		<groupId>net.lovelycode.dp</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<groupId>net.lovelycode.dp.tools</groupId>
+	<artifactId>nanite</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Nanite</name>
+	<description>A tiny 'droid.</description>
+	<build>
+		<plugins>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.0.2</version>
@@ -20,57 +21,78 @@
 					<source>1.6</source>
 					<target>1.6</target>
 				</configuration>
-    </plugin>
-  <plugin>
-         <groupId>org.codehaus.mojo</groupId>
-           <artifactId>jaxws-maven-plugin</artifactId>
-           <executions>
-             <execution>
-               <goals>
-                 <goal>wsimport</goal>
-               </goals>
-               <configuration>
-                 <wsdlUrls>
-                   <wsdlUrl>http://www.nationalarchives.gov.uk/pronom/service.asmx?WSDL</wsdlUrl>
-                 </wsdlUrls>
-                 <wsdlFiles>
-			       <wsdlFile>www.nationalarchives.gov.uk/pronom/service.wsdl</wsdlFile>
-                 </wsdlFiles>
-      			 <packageName>uk.gov.nationalarchives.pronom</packageName>
-      			 <catalog>catalog.xml</catalog>
-               </configuration>
-             </execution>
-           </executions>
-       </plugin>
-  </plugins>
-  </build>
-  <dependencies>
-  	<dependency>
-  		<groupId>junit</groupId>
-  		<artifactId>junit</artifactId>
-  		<version>4.6</version>
-  		<type>jar</type>
-  		<scope>test</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>log4j</groupId>
-  		<artifactId>log4j</artifactId>
-  		<version>1.2.14</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
-  	</dependency>
-  </dependencies>
-   <repositories>
-     <repository>
-       <id>maven2-repository.dev.java.net</id>
-       <name>Java.net Repository for Maven 2</name>
-       <url>http://download.java.net/maven/2/</url>
-     </repository>
-   </repositories>
-  <pluginRepositories>
-     <pluginRepository>
-       <id>maven2-repository.dev.java.net</id>
-       <url>http://download.java.net/maven/2/</url>
-     </pluginRepository>
-   </pluginRepositories>  
+			</plugin>
+			<!-- 
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxws-maven-plugin</artifactId>
+				<version>1.12</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>wsimport</goal>
+						</goals>
+						<configuration>
+							<wsdlUrls>
+								<wsdlUrl>http://www.nationalarchives.gov.uk/pronom/service.asmx?WSDL</wsdlUrl>
+							</wsdlUrls>
+							<wsdlFiles>
+								<wsdlFile>www.nationalarchives.gov.uk/pronom/service.wsdl</wsdlFile>
+							</wsdlFiles>
+							<packageName>uk.gov.nationalarchives.pronom</packageName>
+							<catalog>catalog.xml</catalog>
+							<keep>true</keep>
+							<staleFile>${project.build.directory}/jaxws/stale/staleFlag</staleFile>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			 -->
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.6</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.14</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.4</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+	<repositories>
+		<repository>
+			<id>maven2-repository.dev.java.net</id>
+			<name>Java.net Repository for Maven 2</name>
+			<url>http://download.java.net/maven/2/</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>maven2-repository.dev.java.net</id>
+			<url>http://download.java.net/maven/2/</url>
+		</pluginRepository>
+	</pluginRepositories>
+	<profiles>
+		<profile>
+			<id>bootstrap</id>
+			<build>
+				<plugins>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

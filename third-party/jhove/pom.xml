@@ -1,0 +1,105 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>edu.harvard.hul.ois.jhove</groupId>
+	<artifactId>jhove</artifactId>
+	<name>JHOVE - JSTOR/Harvard Object Validation Environment</name>
+	<version>1.4.1</version>
+	<url>http://hul.harvard.edu/jhove/</url>
+	<!-- checkout, OR download - http://downloads.sourceforge.net/project/jhove/jhove/JHOVE%201.4/jhove-1_4.zip?use_mirror=switch -->
+	<scm>
+		<connection>scm:cvs:pserver:anonymous:@jhove.cvs.sourceforge.net:/cvsroot/jhove:jhove</connection>
+	</scm>
+	<build>
+		<!-- <sourceDirectory>target/generated-sources/main/java</sourceDirectory> -->
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.0.2</version>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-scm-plugin</artifactId>
+				<configuration>
+					<goals>install</goals>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>checkout</goal>
+						</goals>
+						<configuration>
+							<skipCheckoutIfExists>true</skipCheckoutIfExists>
+							<!-- This does not work, as it only checks-out the files from r1.5! 
+								<scmVersion>1.5</scmVersion> <scmVersionType>revision</scmVersionType> -->
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.4.1</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/generated-sources/main/java</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/target/checkout/classes</directory>
+									<filtering>false</filtering>
+									<!--  Exclude the files we wish to patch -->
+									<excludes>
+										<exclude>**/JhoveBase.java</exclude>
+									</excludes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.1</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>
+									${basedir}/src/main/java
+                           </source>
+								<source>
+									${basedir}/target/generated-sources/main/java
+                           </source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.7</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
