@@ -98,6 +98,7 @@ public class FileSelectionPanel {
 	    selectionButtons.setLayout(new GridLayout(1,2));
 	    tools.add(selectionButtons, BorderLayout.WEST);
 	    chooseButton = new JButton(this.getIcon("resources/plus-8.png", "Add files to this collection."));
+	    chooseButton.putClientProperty( "JButton.buttonType", "textured" );
 	    selectionButtons.add(chooseButton);
 	    chooseButton.addActionListener( new ActionListener() {
 			@Override
@@ -138,10 +139,13 @@ public class FileSelectionPanel {
 	    // Add the Favourites icon
 	    JButton favButton = new JButton( favIcon );
 	    selectionButtons.add(favButton);
-	    
+	    minusButton.putClientProperty( "JButton.buttonType", "textured" );
+
 	    // Add add the configuration menu button
 	    JButton configButton = new JButton("@");
 	    tools.add(configButton, BorderLayout.EAST);
+	    configButton.putClientProperty( "JButton.buttonType", "textured" );
+
 
 		// Create Source:
         fsm = new FileSystemModel();
