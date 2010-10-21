@@ -65,30 +65,52 @@
 			<id>build-stubs</id>
 			<build>
 				<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jaxws-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>wsimport</goal>
-						</goals>
-						<configuration>
-							<wsdlUrls>
-								<wsdlUrl>http://www.nationalarchives.gov.uk/pronom/service.asmx?WSDL</wsdlUrl>
-							</wsdlUrls>
-							<wsdlFiles>
-								<wsdlFile>www.nationalarchives.gov.uk/pronom/service.wsdl</wsdlFile>
-							</wsdlFiles>
-							<packageName>uk.gov.nationalarchives.pronom</packageName>
-							<catalog>catalog.xml</catalog>
-							<keep>true</keep>
-							<sourceDestDir>src/main/java</sourceDestDir>
-							<destDir></destDir>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>jaxws-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<goals>
+									<goal>wsimport</goal>
+								</goals>
+								<configuration>
+									<wsdlUrls>
+										<wsdlUrl>http://www.nationalarchives.gov.uk/pronom/service.asmx?WSDL</wsdlUrl>
+									</wsdlUrls>
+									<wsdlFiles>
+										<wsdlFile>www.nationalarchives.gov.uk/pronom/service.wsdl</wsdlFile>
+									</wsdlFiles>
+									<packageName>uk.gov.nationalarchives.pronom</packageName>
+									<catalog>catalog.xml</catalog>
+									<keep>true</keep>
+									<sourceDestDir>src/main/java</sourceDestDir>
+									<destDir></destDir>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- 
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.1.1</version>
+						<executions>
+							<execution>
+								<phase>test</phase>
+								<goals>
+									<goal>java</goal>
+								</goals>
+								<configuration>
+									<mainClass>com.main.gen.Class</mainClass>
+									<arguments>
+										<argument>arg1</argument>
+										<argument>arg2</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					 -->
 				</plugins>
 			</build>
 		</profile>
