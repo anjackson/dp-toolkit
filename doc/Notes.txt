@@ -2,7 +2,23 @@ Have partially modified this approach, from copies of the source, to building fr
 
 Note that these are already all Mavened up, and very useful.
 
- - Apache Tika
- - Apache PDFBox
- - Apache VFS
- - ...
+- Apache Tika
+- Apache PDFBox
+- Apache VFS
+- ...
+
+ 
+JHOVE
+=====
+
+TIFF
+----
+See http://www.asmail.be/msg0054752394.html
+
+So, the standard says offsets must be on even-byte boundaries, but many pieces 
+of software permit even byte bounds. In this case, a flag is used in the config 
+to indicate if odd-bounds are considered 'valid'. This is really a policy 
+statement, and perhaps belongs elsewhere. Really, we want to say that this 
+TIFF nearly conforms to TIFF 6.0, or conforms to "TIFF 6.0 with odd offsets".
+i.e. that JHOVE should parse as TIFF and report exceptions in a well-specified
+manner, and that a separate process applies policy to that information.
