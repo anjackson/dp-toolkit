@@ -29,13 +29,11 @@ public class JHoveTest {
 	@Test
 	public void testMain() {
 		List<String> args = new Vector<String>();
-		args.add("pom.xml");
+		args.add("src/test/java/JHoveTest.java");
+		//args.add("pom.xml");
 /*
-		args[0] = "-c";
-//		args[1] = "jar:file:///Users/anj/Projects/digitalpreservation/dp-toolkit/tools/jhove/target/jhove-1.4.1.jar!/jhove.conf";
-//		args[1] = "file:///Users/anj/Projects/digitalpreservation/dp-toolkit/tools/jhove/target/checkout/conf/jhove.conf";
-		args[1] = "target/checkout/conf/jhove.conf";
-		args[2] = "pom.xml";
+		args.add("-c");
+		args.add("target/checkout/conf/jhove.conf");
 */		
 		Jhove.main( args.toArray( new String[0] ) );
 //		fail("Not yet implemented");
