@@ -20,6 +20,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.io.IOUtils;
 
@@ -63,27 +64,25 @@ public class SigFileUtils {
 	 * @param os
 	 * @throws JAXBException
 	 */
-	public static void writeSigFileToOutputStream( SigFile sigFile, OutputStream os ) throws JAXBException {
+	public static void writeSigFileToOutputStream( SignatureFileType sigFile, OutputStream os ) throws JAXBException {
 		//Create marshaller
 		Marshaller m = jc.createMarshaller();
 		m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
-		//Marshal object into file.
-		/* This override uses a different root element 
-		 * But if you use this, then the unmarshaller doesn't know about it and gets confused.
+		// Marshal object into file.
+		// This override uses a different root element:
 	    JAXBElement<SignatureFileType> rootElement = 
 			new JAXBElement<SignatureFileType>(
 					new QName("http://www.nationalarchives.gov.uk/pronom/SignatureFile","FFSignatureFile"), 
-					SignatureFileType.class, sigFile.getFFSignatureFile() );
+					SignatureFileType.class, sigFile );
 		m.marshal( rootElement , os);
-		*/
-		GetSignatureFileV1Response container = new GetSignatureFileV1Response();
-		container.setSignatureFile(sigFile);
-		m.marshal(container, os);
 	}
 	
-	public static GetSignatureFileV1Response readSigFile( File input ) throws FileNotFoundException, JAXBException {
-		Unmarshaller u = jc.createUnmarshaller();		
-		return (GetSignatureFileV1Response)u.unmarshal( new FileInputStream(input) );		
+	public static SignatureFileType readSigFile( File input ) throws FileNotFoundException, JAXBException {
+		// Override the root element, as shown at:
+		//  https://jaxb.dev.java.net/guide/_XmlRootElement_and_unmarshalling.html
+		Unmarshaller u = jc.createUnmarshaller();
+		JAXBElement<SignatureFileType> root = u.unmarshal(new StreamSource(input),SignatureFileType.class);
+		return root.getValue();
 	}
 	
 	/**
@@ -98,19 +97,20 @@ public class SigFileUtils {
 		}
 		
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		writeSigFileToOutputStream(sigFile,bos);
+		writeSigFileToOutputStream(sigFile.getFFSignatureFile(),bos);
 		// Turn it into a string:
 		String xml = bos.toString("UTF-8");
-		System.out.println(xml.substring(0, 200));
+		System.out.println(xml.substring(0, 500));
 	
 		// Write it to a file:
 		String filename = "droid-signature_"+sigFile.getFFSignatureFile().getVersion()+".xml";
-		writeSigFileToOutputStream( sigFile, new FileOutputStream(filename) );
+		writeSigFileToOutputStream( sigFile.getFFSignatureFile(), new FileOutputStream(filename) );
 		
 		// Read it back:
-		GetSignatureFileV1Response s2 = readSigFile( new File(filename) );
+		SignatureFileType s2 = readSigFile( new File(filename) );
+		System.out.println("Read back sigfile: "+s2.getVersion());
 		
-		System.out.println(downloadPronomRecordForPUID("fmt/1"));
+		System.out.println(downloadPronomRecordForPUID("fmt/1").substring(0, 500));
 		
 		// This downloads all the valid PRONOM record files.
 		//downloadAllPronomFormatRecords();
@@ -124,7 +124,8 @@ public class SigFileUtils {
 		System.out.println("Got version "+version);
 		String filename = "SignatureFile.xml";
 		try {
-			writeSigFileToOutputStream( sigFile, new FileOutputStream( new File( outputFolder, filename) ) );
+			writeSigFileToOutputStream( sigFile.getFFSignatureFile(),
+					new FileOutputStream( new File( outputFolder, filename) ) );
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
