@@ -1,0 +1,10 @@
+#!/bin/bash
+
+JAVA_HOME="/usr/java/j2sdk1.4.2_03/jre"
+DOM4J_HOME="./dom4j-full.jar"
+XERCES_HOME="./xercesImpl.jar"
+XMLAPIS_HOME="./xml-apis.jar"
+XMLDIFF_HOME="./XMLDiff.jar"
+SCHEMA_HOME="./XMLDiff_schema.xsd"
+
+$JAVA_HOME/bin/java -cp $DOM4J_HOME:$XMLDIFF_HOME:$XERCES_HOME:$XMLAPIS_HOME:$SCHEMA_HOME epcc.xmldiff.Main $1 $2 $3 $4 $5

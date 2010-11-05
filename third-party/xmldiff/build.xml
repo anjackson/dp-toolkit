@@ -1,0 +1,97 @@
+<project name="xmldiff" default="xmldiff-jar" basedir=".">
+
+  <description>
+
+    XMLDiff build file.
+
+    The XMLDiff build depends on dom4j-full.jar xercesImpl.jar and
+    xml-apis.jar. This build file expects to find these jars in the
+    current directory. This behaviour can be overridden by setting the
+    properties "dom4j.dir", "xerces.dir" and "xmlapis.dir" to the full
+    paths of the directories containing these jars.
+
+    For example:
+
+    If all these jars live in /usr/jars, then ant should be called as
+    follows:
+      ant -Ddom4j.dir="/usr/jars" -Dxerces.dir="/usr/jars" -Dxmlapis.dir="/usr/jars"
+
+  </description>
+
+
+
+  <!-- global properties -->
+  <property name="build.dir"       location="bin"/>
+  <property name="src.dir"         location="src"/>
+  <property name="xmldiff.jar.dir" location="."/>
+  <property name="xmldiff.jar"     location="${xmldiff.jar.dir}/xmldiff.jar"/>
+  <property name="dom4j.dir"       location="."/>
+  <property name="xerces.dir"      location="."/>
+  <property name="xmlapis.dir"     location="."/>
+  <property name="dom4j.jar"       location="${dom4j.dir}/dom4j-full.jar"/>
+  <property name="xerces.jar"      location="${xerces.dir}/xercesImpl.jar"/>
+  <property name="xmlapis.jar"     location="${xmlapis.dir}/xml-apis.jar"/>
+
+
+  <!-- define classpath -->
+  <path id="build.class.path">
+    <pathelement location="${dom4j.jar}"/>
+    <pathelement location="${xerces.jar}"/>
+    <pathelement location="${xmlapis.jar}"/>
+  </path>
+
+
+  <!-- compile target -->
+  <target name="compile">
+
+    <!-- tell the user where we are getting the external jars -->
+    <echo>
+      dom4j location:   ${dom4j.jar}
+      xerces location:  ${xerces.jar}
+      xmlapis location: ${xmlapis.jar}
+    </echo>
+
+    <!-- create output directory -->
+    <mkdir dir="${build.dir}"/>
+
+    <!-- compile -->
+    <javac srcdir="${src.dir}" destdir="${build.dir}">
+      <classpath refid="build.class.path"/>
+    </javac>
+  </target>
+  
+  <!-- create xmldiff jar target -->
+  <target name="xmldiff-jar" 
+          depends="compile"
+          description="Builds the XMLDiff jar file.">
+
+
+    <jar destfile="${xmldiff.jar}" basedir="${build.dir}"/>
+
+    <!-- clean up -->
+    <delete dir="${build.dir}"/>
+  </target>
+
+
+  <target name="clean"
+          description="Removes all directories and files created while building XMLDiff.">
+    <delete file="${xmldiff.jar}"/>
+    <delete dir="${build.dir}"/>
+  </target>
+
+
+  <target name="javadoc"
+          description="Generates Javadoc for source files of XMLDiff.">
+
+     <javadoc packagenames="epcc.xmldiff.*"
+              sourcepath="${src.dir}"
+              classpath="${dom4j.jar}"
+              destdir="./docs"
+              author="true"
+              version="true"
+              use="true">
+
+     </javadoc>
+   </target>
+
+</project>

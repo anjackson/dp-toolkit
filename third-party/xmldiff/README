@@ -1,0 +1,922 @@
+XMLDiff User Documentation
+
+This documentation contains all the information you should require
+to run the XMLDiff tool efficiently and effectively.
+
+Please refer to INSTALL for installation instructions, and to LICENSE
+for licensing information. 
+
+Within the 'examples' folder, there are example control, candidate 
+and metric XML documents which should help you to familiarise yourself
+with the XMLDiff tool. Included in this folder is an example metric
+document for schema-based validation termed 'metric_forvalidation.xml'
+(please refer to the XMLDiff Overview, and section 2.1) and other 
+metric documents that are intentionally invalid to demonstrate the 
+typical output from XMLDiff. These files are:-
+ - 'metric_comparisonError.xml', 
+ - 'metric_typeError.xml',
+ - 'metric_toleranceError.xml' and 
+ - 'metric_xpathError.xml' 
+
+
+XMLDiff Overview
+----------------
+
+The XMLDiff tool is a command-line based application designed to
+compare and highlight any differences between the data of two XML 
+documents. The way in which the two documents are compared is
+prescribed by the user within a third XML document, termed the 
+'metric'.
+
+XMLDiff may be run in one of two modes:-
+
+Mode 1 - Enables comparison of two XML documents as described above.
+
+The syntax for running XMLDiff in this mode (please see Section 1
+for more information) is:-
+
+ xmldiff controlfile candidatefile metricfile [logfile] [-v][-s]
+
+It is presumed that XMLDiff will be provided with one XML document 
+containing data that is known to be 'correct'. The second XML
+document contains data that the user wishes to compare against that of
+the first document. Throughout the XMLDiff application and associated
+documentation, these documents are refered to as 'control' and 
+'candidate' respectively.
+
+How XMLDiff compares the data of these two documents is defined 
+by the metric. Instructions on how to generate a metric document are
+provided in Section 2.
+
+Prior to the comparison process, XMLDiff retrieves and validates each 
+document in turn and also structurally compares the control and 
+candidate documents. Should any irregularities arise during any of 
+these preparatory steps, XMLDiff will fail and the user will be 
+notified of the reason. Section 3 describes the various scenarios that
+may result in an XMLDiff failure and the associated exit values that 
+will be returned by XMLDiff. 
+
+
+Mode 2 - Enables validation of a user-generated metric document.
+
+The syntax for running XMLDiff in this mode (please see Section 1
+for more information) is:-
+
+ xmldiff -m metricfile [logfile]
+
+Section 2.1 describes how to configure a metric document for 
+validation.
+
+
+1. XMLDiff Syntax
+-----------------
+
+The command-line syntax for XMLDiff is:-
+
+    xmldiff [-h] [-version]
+or  xmldiff controlfile candidatefile metricfile [logfile] [-v][-s]
+or  xmldiff -m metricfile [logfile]
+
+-h -help        Display this help syntax (as above).
+-version        Display product version information.
+controlfile     File containing the 'correct' XML document.
+candidatefile   File containing the XML document to be compared to the
+                controlfile document.
+metricfile      File containing the comparison specification.
+logfile         File to which all output should be logged (default is
+                'log').
+-v              Enable verbose output via the console and log file.
+-s              Enable silent output. No output is generated
+                except for an exit value to the log file:-
+                0 = pass
+                1 = pass but warnings were logged
+                2 = failure due to invalid input
+                3 = failure due to structural differences 
+                4 = failure due to document differences
+-m              Enable validation of metricfile
+
+
+2. The Metric Document
+----------------------
+
+The metric document contains instructions on WHAT data within two
+XML documents should be compared, and HOW that data should be 
+compared.
+
+These instructions are encapsulated within 'assertion' elements of
+the metric XML document. Each assertion element contains the
+following attributes:-
+
+ Attribute    Functionality
+
+ xpath        Defines an XPath expression to locate the data within
+              both control and candidate documents which is to be
+              compared.
+ type         Defines the data type.
+ comparison   Defines the comparison operation to be executed on
+              the data.
+ tolerance    Defines the tolerance allowance (if any) governing the
+              comparison operation.
+
+Therefore, an example assertion element would be:-
+ 
+ <assertion xpath="//f" type="double" comparison="relative" 
+            tolerance="0.01"/>
+
+
+ Setting Attribute 'xpath'
+ -------------------------
+
+ The XPath expression actually locates all elements within an XML
+ document whose path matches the expression. Specifically, you need
+ only provide XMLDiff with the location of the elements containing 
+ the data you want compared. 
+
+ The XPath expression must only target leaf node elements however, 
+ as only the comparison of leaf node elements is supported by XMLDiff.
+
+ The example below describes the various ways to generate a valid 
+ XPath expression.
+
+ Example XML document 
+ <?xml version="1.0"?>
+   
+ <root>
+   <a>
+     <b>1.309e-3</b>
+     <b>0</b>
+     <c>
+       <d>0.008647</d>
+       <d>-0.02197</d>
+     </c>
+   </a>
+   <g>
+     <b>1.4e-2</b>
+     <c>
+       <d>1.1129</d>
+       <e>1.1140</e>
+       <f>-0</f>
+     </c>
+   </g>
+ </root>
+
+ The expression /root/a/b selects all b child elements of all
+ the a child elements of root.
+
+ The expression //b selects all b child elements in the XML document 
+ irrespective of their absolute document location.
+
+ Therefore, the absolute path to an element can be specified by 
+ starting with a single forward slash '/'. Starting with two forward 
+ slashes '//' will locate all elements that simply fulfill that 
+ criterion, whereever they are in the XML document.
+
+ Wildcards (*) may also be used to locate via unknown elements. For
+ example, /*/*/c will locate all c elements that have 2 ancestors.
+
+ **PLEASE NOTE: Wildcards may be used to traverse across unknown
+ ancestors, but they may NOT be used to locate specific elements.
+ Only the data of leaf-node elements, i.e. elements that have no 
+ children, will be compared by XMLDiff. Use of wildcards to locate 
+ elements for comparison may result in the retrieval of non 
+ leaf-node elements which is not supported by XMLDiff.
+
+
+ Setting Attribute 'type'
+ ------------------------
+
+ Attribute type may hold one of the following values: real, double, 
+ integer, complex, string, real_array, double_array, integer_array 
+ and complex_array.
+
+
+ Setting Attribute 'comparison'
+ ------------------------------
+
+ Attribute comparison may hold one of the following values: absolute,
+ absolute_real, absolute_imaginary, relative, relative_real,
+ relative_imaginary, equality and ignore.
+
+ - Absolute comparison
+   The absolute comparison of two numbers establishes whether or not the
+   difference between the numbers falls below the required tolerance.
+
+ - Relative comparison
+   The relative comparison of two numbers establishes whether or not the
+   difference between the numbers (when normalised by the magnitude of the
+   larger number) falls below the required tolerance. 
+
+   Effectively, the relative comparison operation allows a user to make a 
+   percentile comparison of two numbers. For example, a relative comparison of 
+   'a' and 'b' with a tolerance of 0.1 establishes whether or not two numbers 
+   agree to within 10%.
+ 
+ - Equality comparison
+   The equality comparison of two values (String or numeric data types) 
+   establishes whether or not the values equate.
+
+ - Ignore
+   The ignore comparison ignores any differences between two values, or infact
+   if the values are valid, and always returns a comparison pass.
+
+ Appendix A lists the actual equations implemented within XMLDiff for 
+ numerical data comparison.
+
+ Specifying a comparison operation does, however, depend on the data
+ type specified. Please refer to the table below to see which 
+ comparison operations are supported by which data types:-
+
+ DATE TYPE                     COMPARISON OPERATION
+
+ real, real_array              absolute, relative, ignore
+
+ double, double_array          absolute, relative, ignore
+
+ integer, integer_array        equality, absolute, relative, ignore
+
+ complex, complex_array        absolute, absolute_real, 
+                               absolute_imaginary, relative, 
+                               relative_real, relative_imaginary, 
+                               ignore
+
+ string                        equality, ignore
+
+
+ Setting Attribute 'tolerance'
+ -----------------------------
+
+ With the exception of when comparison operation values 'equality' 
+ and 'ignore' have been specified, a value must also be assigned to
+ the tolerance attribute. This denotes to what degree two data values 
+ may differ for them to still be defined as in agreement. 
+
+ Please refer to the table below which defines what type of tolerance 
+ value is supported by the various possible comparison operation and 
+ data type value combinations:- 
+
+ DATA TYPE             COMPARISON OPERATION      TOLERANCE VALUE,
+                                                 should be of type:
+
+ real, real_array      absolute, relative        real
+   
+ double,               absolute, relative        double
+ double_array  
+
+ complex,              absolute, absolute_real   double
+ complex_array         absolute_imaginary,
+                       relative, relative_real
+                       relative_imaginary
+
+ integer,              absolute                  integer
+ integer_array 
+
+ integer,              relative                  double
+ integer_array 
+
+
+Putting this all together, an example metric document may look like:-
+
+<?xml version="1.0"?>
+
+<assertions>
+
+ <assertion xpath="/*/*/e" type="real_array" comparison="ignore" 
+            tolerance=""/>
+ <assertion xpath="//f" type="complex" comparison="relative_real" 
+            tolerance="0.01"/>
+ <assertion xpath="*/a/d" type="integer" comparison="equality" 
+            tolerance=""/>
+ <assertion xpath="//b" type="double" comparison="absolute" 
+            tolerance="0.001"/>
+
+</assertions>
+
+The metric document may contain one or many assertion elements. 
+XMLDiff reads each element in turn and executes the specified 
+comparison operation on each control and candidate data value
+retrieved via the xpath attribute.
+
+**PLEASE NOTE: The ordering of assertion elements within the metric 
+document is very important. XMLDiff reads each element from the 
+document BOTTOM-UP. Therefore assertion elements containing more 
+specific, high precedence comparison instructions (i.e. perhaps
+targetting a small sub-group of elements and specifying a very small
+tolerance value) should be placed at the bottom of the metric document
+and those containing more general, low precedence comparison 
+instructions at the top. 
+
+ 
+ 2.1  Validating the metric document using a schema
+ --------------------------------------------------
+
+ Prior to comparing two XML documents, you may wish to ensure that 
+ the metric document you have generated is of the correct format and 
+ contains valid instructions. 
+
+ Distributed with XMLDiff is an XML schema which has been designed to
+ ensure that the following requirements of a metric document are 
+ met:-
+    
+  - The metric document represents well-formed XML,
+  - Instructions are listed within 'assertions' elements by 'assertion'
+    elements, i.e.
+
+    <?xml version="1.0"?>
+
+    <assertions ...>
+
+      <assertion .../>
+      <assertion .../>
+
+    </assertions> 
+
+  - All required attributes of assertion elements are present 
+    (xpath, type, comparison and tolerance),
+  - The xpath attribute is of a string data type,
+  - The type attribute is of a string data type and matches one of 
+    the supported types (real, double, complex etc),
+  - The comparison attribute is of a string data type and matches one
+    of the supported comparison operations (absolute, relative etc),
+  - The tolerance attribute is of a decimal data type
+
+ To enable schema-based validation of your metric document you must 
+ complete the following:-
+
+ 1. Reference the schema document within your metric document. 
+    This is achieved by including the following statement within the
+    opening 'assertions' element tag:-
+
+     <assertions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:noNamespaceSchemaLocation="XMLDiff_schema.xsd">
+
+ 2. Run XMLDiff in the appropriate mode using the following syntax:-
+
+     xmldiff -m metricfile [logfile]
+
+ Any errors arising from metric validation are represented as SETUP
+ ERRORS and XMLDiff will fail with a corresponding exit value of 2 
+ (See Section 3 for further explaination). If validation generates 
+ no errors, XMLDiff will pass with a corresponding exit value of 0.
+
+ For example, if schema validation were used on the following metric
+ document which contains a misspelled comparison operation value:-
+
+  <?xml version="1.0"?>
+
+  <assertions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+              xsi:noNamespaceSchemaLocation="XMLDiff_schema.xsd">
+
+   <assertion xpath="//vals" type="real" comparison="absolu" 
+              tolerance="0.001" />
+
+  </assertions>
+
+ the output generated would be:-
+
+  SETUP ERROR: Error occurred during parsing of XML document(s)
+  org.dom4j.DocumentException: Error on line 5 of document  : 
+  cvc-attribute.3: The value 'absolu' of attribute 'comparison' on 
+  element 'assertion' is not valid with respect to its type. 
+  Nested exception: cvc-attribute.3: The value 'absolu' of attribute 
+  'comparison' on element 'assertion' is not valid with respect to 
+  its type.
+  2
+
+ **PLEASE NOTE: If you do not reference the schema document within 
+ your metric document and run XMLDiff in validating mode, NO schema-
+ based validation will take place. XMLDiff will simply exit with an
+ exit value of 0 (i.e. pass) because no errors occurred.
+
+ Likewise, if you provide a metric document which references a 
+ schema document and run XMLDiff in its normal document comparison 
+ mode, no schema-based validation will take place.  
+
+
+3. XMLDiff exit values explained
+--------------------------------
+
+XMLDiff will always display a descriptive exit value to the console 
+and/or logfile and exit with that value. Within this section, each 
+exit value will be explained in turn and examples of the various 
+determining factors will also be provided.
+
+
+ 3.1  Exit value 0
+ -----------------
+
+ An exit value of 0 denotes that the data of the control and candidate
+ documents was compared and found to equate (as defined by the metric 
+ document). 
+
+ When XMLDiff is being used to validate a metric document, an exit 
+ value of 0 denotes that the validation passed.
+
+
+ 3.2  Exit value 1
+ -----------------
+
+ An exit value of 1 denotes that the data of the control and candidate
+ documents was compared and found to equate, however warnings were 
+ logged during this process. 
+
+ Warnings reflect that situations arose in which data comparisons, 
+ as specified by the metric, for some reason did not take place. 
+
+ There are two possible causes of such situations:-
+
+ Cause 1) The metric document specified an xpath expression that
+	  referenced non-existing elements within the control and 
+          candidate documents.
+
+          For example, consider the following control and candidate
+          documents:-
+            
+           Control                         Candidate
+           <?xml version="1.0"?>           <?xml version="1.0"?>
+
+           <a>                             <a>
+             <b>                             <b>
+               <e>1.1e-3</e>                   <e>0.9e-3</e>
+               <e>-3.9e-3</e>                  <e>1.1e-4</e>
+             </b>                            </b>   
+             <d>                             <d>
+               <e>0</e>                        <e>0</e>
+             </d>                            </d>
+             <f>0</f>                        <f>1</f>
+           </a>                            </a>
+            
+            
+          If the following metric document were used:-
+
+           <?xml version="1.0"?>
+
+           <assertions>
+            <assertion  xpath="//g" type="integer" 
+                        comparison="absolute" tolerance="0.1"/>
+           </assertions>
+
+          the output generated would be:-
+
+           ELEMENT-VALUE WARNING [metric.xml line 4]: No elements 
+           were returned for XPath expression - //g
+           ELEMENT-VALUE COMPARISON: Element value comparison 
+           completed with 1 warning(s)
+           1
+
+ Cause 2) The metric document specified an xpath expression that
+	  referenced elements within the control and 
+          candidate documents that were not leaf node elements.
+
+          For example, using the same control and candidate documents
+          above, if the following metric document were used:-
+
+           <?xml version="1.0"?>
+
+           <assertions>
+            <assertion xpath="//d" type="integer" 
+                       comparison="absolute" tolerance="0.1"/>
+           </assertions>
+
+          the output generated would be:-
+
+           ELEMENT-VALUE WARNING [metric.xml line 4]: Elements 
+           returned by the following XPath expression are not leaf 
+           node elements - //d
+           ELEMENT-VALUE COMPARISON: Element value comparison 
+           completed with 1 warning(s)
+           1
+  
+ **PLEASE NOTE: During the comparison process, both warnings and 
+ data differences will be logged should they occur. 
+
+ If only warnings are logged, XMLDiff will exit with the value 1. 
+
+ If only data differences occur, XMLDiff will exit with the value 4
+ (see Section 3.5). 
+
+ If both warnings and data differences occur, XMLDiff will exit with 
+ the value 4 (as data differences are perceived to be more 
+ significant). In this case, the user will be notified that warnings 
+ occurred only if verbose logging is enabled. 
+
+
+ 3.3  Exit value 2
+ -----------------
+
+ An exit value of 2 denotes that comparison of the control and
+ candidate documents did not take place due to problems processing
+ user input data.
+
+ Special case: when XMLDiff is being used to validate a metric 
+ document, an exit value of 2 denotes that the validation failed. 
+
+ When using XMLDiff in normal comparison mode, there are many 
+ possible causes of such an exit value. The most common causes are 
+ listed below, accompanied by the output that would be generated in 
+ each case:-
+
+ - Failing to provide the appropriate input arguments.
+
+    SETUP ERROR: Incorrect number of arguments supplied to XMLDiff - 
+    please check your argument input
+    2
+
+ - Failing to provide valid arguments for control, candidate and/or
+   metric documents.
+
+    SETUP ERROR: Error occurred while attempting to retrieve input 
+    files
+    java.io.FileNotFoundException: mnetric.xml (The system cannot 
+    find the file specified)
+    2
+
+ - Control, candidate and/or metric documents do not represent
+   well-formed XML.
+
+    SETUP ERROR: Error occurred during parsing of XML document(s)
+    org.dom4j.DocumentException: Error on line 12 of document  : The 
+    element type "f" must be terminated by the matching end-tag 
+    "</f>". Nested exception: The element type "f" must be terminated 
+    by the matching end-tag "</f>".
+    2
+
+ - Metric document 'assertion' elements are invalid.
+
+    SETUP ERROR [metric.xml line 4]: Non-valid value for assertion 
+    attribute 'type' has been specified - rea
+    [Supported data types:- real, double, integer, complex, string, 
+    real_array, double_array, integer_array and complex_array]
+    2
+
+    SETUP ERROR [metric.xml line 4]: Non-valid value for assertion 
+    attribute 'comparison' has been set for the double type - equality
+    [Supported comparison operations for the double type are:- 
+    absolute, relative and ignore]
+    2
+
+    SETUP ERROR [metric.xml line 4]: Non-valid value for assertion 
+    attribute 'xpath' has been specified - //1
+    org.dom4j.InvalidXPathException: Invalid XPath expression: //1 
+    Unexpected '1'
+    2
+
+
+ 3.4  Exit value 3
+ -----------------
+
+ An exit value of 3 denotes that comparison of the control and
+ candidate documents did not take place due to structural
+ inconsistencies.
+
+ Structural inconsistencies result from the candidate document
+ having missing or extra XML elements, or elements whose element tag
+ names do not equate to those of the control document. 
+
+ Example output resulting from these three distinct scenarios can be 
+ viewed below:
+
+  Control                              Candidate
+  <?xml version="1.0"?>                <?xml version="1.0"?>
+
+  <a>                                  <a>
+    <b>                                  <b>
+      <e>1.1e-3</e>                        <e>0.9e-3</e>
+      <e>-3.9e-3</e>                       <e>1.1e-4</e>
+    </b>                                   <e>0</e>     
+    <d>                                  </b>
+      <e>0</e>                           <d>
+    </d>                                   <e>0></e>
+    <f>0</f>                             </d>
+  </a>                                   <f>1</f>
+                                       </a>
+
+  STRUCTURAL ERROR [candidate.xml line 4]: Candidate document contains 
+  extra elements within '/a/b' (control: 2, candidate: 3)
+  3
+
+
+  Control                              Candidate
+  <?xml version="1.0"?>                <?xml version="1.0"?>
+
+  <a>                                  <a>
+    <b>                                  <b>
+      <e>1.1e-3</e>                        <e>0.9e-3</e>
+      <e>-3.9e-3</e>                       <e>1.1e-4</e>
+    </b>                                 </b>   
+    <d>                                  <d>
+      <e>0</e>                             <e>0</e>
+    </d>                                 </d>
+    <f>0</f>                           </a>
+  </a>                                  
+
+  STRUCTURAL ERROR [candidate.xml line 3]: Candidate document is 
+  missing elements within '/a' (control: 3, candidate: 2)
+  3
+
+
+  Control                              Candidate
+  <?xml version="1.0"?>                <?xml version="1.0"?>
+
+  <a>                                  <a>
+    <b>                                  <b>
+      <e>1.1e-3</e>                        <e1>0.9e-3</e1>
+      <e>-3.9e-3</e>                       <e>1.1e-4</e>
+    </b>                                 </b>   
+    <d>                                  <d>
+      <e>0</e>                             <e>0</e>
+    </d>                                 </d>
+    <f>0</f>                             <f>1</f>
+  </a>                                 </a>
+
+  STRUCTURAL ERROR [control.xml line 5, candidate.xml line 5]: 
+  Control and candidate element node tags do not equate 
+  (control '/a/b/e[1]', candidate '/a/b/e1')
+  3
+
+            
+ 3.5  Exit value 4
+ -----------------
+ 
+ An exit value of 4 denotes that differences were found during the
+ data comparison of control and candidate documents.
+
+ In the majority of cases this means that on one or more occasions, 
+ the data of the control and candidate documents failed to agree 
+ within tolerance. 
+
+ The typical output displayed would be:-
+
+  ELEMENT-VALUE ERROR [control.xml line 5, candidate.xml line 5]: 
+  Relative comparison failed for elements /a/b/e, /a/b/e
+  ELEMENT-VALUE COMPARISON: Element value comparison completed with 
+  1 error(s)
+  4
+
+ However, an exit value of 4 would also result should the data 
+ retrieved from either the control or candidate documents be invalid
+ and therefore unfit for comparison. Invalid data could be data which
+ is: Not-a-Number(NaN), Infinite, missing or of the wrong type.
+
+ Listed below is the typical output that would be displayed should
+ invalid data be encountered:-
+
+ - If no data is retrieved from either the control or candidate
+   elements specified:-
+
+    ELEMENT-VALUE ERROR [control.xml line 9, candidate.xml line 9]: 
+    Element value(s) missing. Comparison not executed on elements 
+    /a/d/e, /a/d/e
+    ELEMENT-VALUE COMPARISON: Element value comparison completed with 
+    1 error(s)
+    4
+
+ - If data retrieved from either the control or candidate elements
+   is not of the correct data type:-
+    
+    ELEMENT-VALUE ERROR [control.xml line 5, candidate.xml line 5]: 
+    Element value(s) are not of the correct 'integer' type. 
+    Comparison not executed on elements /a/b/e, /a/b/e
+    ELEMENT-VALUE COMPARISON: Element value comparison completed with 
+    1 error(s)
+    4
+
+ - If data retrieved from either the control or candidate elements
+   is) is NaN (Not-a-Number) or Infinite:-
+
+    ELEMENT-VALUE ERROR [control.xml line 5, candidate.xml line 5]: 
+    NaN element value(s) located. Comparison not executed on 
+    elements /a/b/e, /a/b/e 
+    ELEMENT-VALUE COMPARISON: Element value comparison completed with 
+    1 error(s)
+    4
+
+    ELEMENT-VALUE ERROR [control.xml line 5, candidate.xml line 5]: 
+    Infinite element value(s) located. Comparison not executed on 
+    elements /a/b/e, /a/b/e
+    ELEMENT-VALUE COMPARISON: Element value comparison completed with 
+    1 error(s)
+    4
+
+
+4. Trouble Shooting
+-------------------
+
+ 4.1  Specifying the array data type
+ -----------------------------------
+
+ If you wish to compare arrays of data within element tags of your
+ control and candidate documents, ensure that you specify use of one 
+ of the array data types within your metric document.
+
+ For example, if you wished to compare the array data of the elements
+ '//f' in the following XML documents:-
+
+  Control                             Candidate
+  <?xml version="1.0"?>               <?xml version="1.0"?>
+
+  <a>                                 <a>
+    <b>                                 <b>
+      <e>1.1e-3</e>                       <e>0.9e-3</e>
+      <e>-3.9e-3</e>                      <e>1.1e-4</e>
+   </b>                                 </b>  
+   <d>                                  <d>
+     <e>0</e>                             <e>0</e>
+   </d>                                 </d>
+   <f>1 1 1 1 1 1 1</f>                 <f>0 0 0 0 0 0 0</f>
+  </a>                                </a>
+
+ you would specify in your metric document the following:-
+   
+  <?xml version="1.0"?>
+
+  <assertions>
+   <assertion xpath="//f" type="integer_array" comparison="absolute" 
+              tolerance="1"/>
+  </assertions>
+
+ simply specifying:-
+
+  <?xml version="1.0"?>
+
+  <assertions>
+   <assertion xpath="//f" type="integer" comparison="absolute" 
+              tolerance="1"/>
+  </assertions>
+
+ would result in an error like the following:-
+
+  ELEMENT-VALUE ERROR [control.xml line 11, candidate.xml line 11]: 
+  Element value(s) are not of the correct 'integer' type. Comparison 
+  not executed on elements /a/f, /a/f
+  ELEMENT-VALUE COMPARISON: Element value comparison completed with 
+  1 error(s)
+  4
+
+
+ 4.2  Complex array path expression
+ ----------------------------------
+
+ The complex array data type is a special case. All other array 
+ data types would expect data within element tags to be of the
+ format:-
+
+  <element-tag>value1 value2 value3 value4....</element-tag>
+
+ However, an array of complex elements is of the format:-
+
+  <element-tag>
+        <elem>
+             <re></re>
+             <img></img>
+        </elem>
+        <elem>
+             <re></re>
+             <img></img>
+        </elem>
+        .....
+  </element-tag>
+
+ Therefore, if you wish to use the complex_array data type, you
+ must ensure that the XPath expression value locates the 'elem' 
+ element tag representing the start of the complex number type. 
+ For example:-
+
+  <?xml version="1.0"?>
+
+  <assertions>
+   <assertion xpath="//elem" type="complex_array" 
+              comparison="absolute" tolerance="0.001"/>
+  </assertions>
+
+ simply specifying:-
+
+  <?xml version="1.0"?>
+
+  <assertions>
+   <assertion xpath="//element-tag" type="complex_array" 
+              comparison="absolute" tolerance="0.001"/>
+  </assertions>
+
+ would result in a warning as the XPath expression targetted an 
+ element which does not follow the complex data type format:-
+   
+  ELEMENT-VALUE WARNING [metric.xml line 4]: Elements returned by 
+  the following XPath expression are not leaf node elements - 
+  //element-tag
+
+
+ 4.3  Using the 'ignore' comparison operation
+ --------------------------------------------
+
+ The ignore comparison opertion is very useful if you wish to simply
+ ignore data differences (or invalid data) which you know to exist 
+ within the XML documents you are comparing.
+
+ Implications of using the ignore comparison operation are:-
+
+ - You do not need to specify a tolerance value within your metric 
+   document (although the tolerance attribute must remain). An example
+   metric XML document would be:-
+
+    <?xml version="1.0"?>
+
+    <assertions>
+     <assertion xpath="//e" type="double" comparison="ignore" 
+                tolerance=""/>
+    </assertions>
+
+ - If the metric document retrieves invalid data for comparison, these
+   are ignored. 
+
+   For example, values that are missing, not of the correct data 
+   type, NaN (Not-a-Number) or Infinite are ignored and the comparison
+   will always pass.
+
+
+5. Notes
+--------
+
+1. XMLDiff version 1.0 has been developed in conjunction with 
+   Java J2SE 1.4.2 Runtime Environment and DOM4J verison 1.4 
+   releases. You may, in the future, wish to upgrade your working 
+   versions of these software packages. If this is the case, we do 
+   not predict the behaviour of XMLDiff should alter however we 
+   cannot absolutely guarantee this.
+
+2. Included in this release is the xmldiff.bat batch file which
+   will enable you to run the XMLDiff tool on a Microsoft Windows 
+   environment should you require to.
+   
+   Please note however that Microsoft Windows is not a supported 
+   environment of the XMLDiff tool.
+
+
+6. Acknowledgements
+-------------------
+
+This work was supported by PPARC Grant PPA/G/O/200200486
+
+ 
+APPENDIX A
+----------
+
+The following comparison operation equations were implemented in XMLDiff
+to compare real, double, integer and complex number data types.
+
+
+ Absolute comparison of two numbers: a and b (for real, double and integer 
+ numbers)
+
+     abs(a - b) < tolerance
+
+
+ Absolute comparison of two complex numbers: a and b (composed as such:
+ a - a_re and a_img  (real and imaginary components) and b - b_re and b_img 
+ (real and imaginary components).
+
+     sqrt{ (a_re - b_re)2 + (a_img - b_img)2 } < tolerance
+
+
+ Absolute comparison of two real numbers: a_re and b_re (for complex numbers)
+
+     abs(a_re - b_re) < tolerance
+ 
+
+ Absolute comparison of two imaginary numbers: a_img and b_img (for complex 
+ numbers)
+
+     abs(a_img - b_img) < tolerance
+
+
+ Relative comparison of two numbers: a and b (for real, double and integer 
+ numbers)
+
+     abs(a - b) / max{ abs(a), abs(b) } < tolerance
+
+
+ Relative comparison of two complex numbers: a and b
+
+     sqrt{ (a_re - b_re)2 + (a_img - b_img)2 } / max[ sqrt{ a_re2 + a_img2 }, 
+            sqrt{ b_re2 + b_img2 } ] < tolerance
+
+
+ Relative comparison of two real numbers: a_re and b_re (for complex numbers)
+
+     abs(a_re - b_re) / max{ abs(a_re), abs(b_re) } < tolerance
+ 
+
+ Relative comparison of two imaginary numbers: a_img and b_img (for complex 
+ numbers)
+
+     abs(a_img - b_img) / max{ abs(a_img), abs(b_img) } < tolerance
+ 
+ 
+
+
+
+
+ 
+   
+
+
+

@@ -1,0 +1,80 @@
+Thank you for downloading the XMLDiff tool.
+
+
+System Requirements
+-------------------
+
+The prerequisites for running XMLDiff version 1.0 are:-
+
+- You have the Java 2 Runtime Environment (JRE) installed on your 
+  machine (preferably the J2SE v1.4.2 JRE  - which is distributed
+  under the terms of the BSD License and can be downloaded from 
+  http://java.sun.com/j2se/1.4.2/download.html).
+
+- You have dom4j installed on your machine (dom4j v1.4 has been distributed 
+  with this XMLDiff release).
+
+- You have xercesImpl.jar and xml-apis.jar from the Xerces-J distribution
+  installed on your machine (these jar files, as distributed with dom4j v1.4,
+  have been distributed with this XMLDiff release)
+
+
+Building XMLDiff from source
+----------------------------
+
+If you wish to build XMLDiff from the xmldiff source, please refer to the
+instructions provided in BUILD.
+
+
+Running XMLDiff
+---------------
+
+Before you can use the XMLDiff tool, you must first modify the bash
+wrapper script ('xmldiff') to reference the distributed libraries
+and Java libraries on your machine. This can be done as follows:-
+
+The bash wrapper script currently looks like:
+ 
+ #!/bin/bash
+
+ JAVA_HOME="/usr/java/j2sdk1.4.2_03/jre"
+ DOM4J_HOME="./dom4j-full.jar"
+ XERCES_HOME="./xercesImpl.jar"
+ XMLAPIS_HOME="./xml-apis.jar"
+ XMLDIFF_HOME="./XMLDiff.jar"
+ SCHEMA_HOME="./XMLDiff_schema.xsd"
+
+ $JAVA_HOME/bin/java -cp $DOM4J_HOME:$XMLDIFF_HOME:$XERCES_HOME:$XMLAPIS_HOME:$SCHEMA_HOME epcc.xmldiff.Main $1 $2 $3 $4 $5
+
+You should 
+1) Edit the 'JAVA_HOME' variable to reference the absolute path to 
+   the location where you installed the Java 2 Runtime Environment.
+2) Edit the 'DOM4J_HOME', 'XERCES_HOME' and 'XMLAPIS_HOME' variables 
+   to reference the absolute paths to the locations where you 
+   installed the dom4j-full, xercesImpl and xml-apis jar files 
+   respectively (which were distributed with this XMLDiff release).
+3) Edit the 'XMLDIFF_HOME' variable to reference the absolute path to
+   the location where you installed the XMLDiff jar file distributed
+   with this XMLDiff release.
+4) Lastly, edit the 'SCHEMA_HOME' variable to reference the absolute 
+   path to the location where you installed the XMLDiff_schema.xsd
+   file distributed with this XMLDiff release.
+
+You are now ready to run XMLDiff.
+
+You can run XMLDiff either via the bash wrapper script, for example
+
+ xmldiff test/control.xml test/candidate.xml test/metric.xml test/log
+
+ or if you wish to validate a metric document:-
+ xmldiff -m test/metric.xml test/log
+
+or from the command line using:
+
+ java -cp dom4j-full.jar:XMLDiff.jar:xercesImpl.jar:xml-apis.jar:XMLDiff_schema.xsd epcc.xmldiff.Main test/control.xml test/candidate.xml test/metric.xml test/log
+
+whereby the java executable must be either set in your path or via the
+'JAVA_HOME' environment variable and the location of the dom4j-full, 
+XMLDiff, xercesImpl and xml-apis jar files and XMLDiff_schema.xsd file
+specified appropriately.
+ 

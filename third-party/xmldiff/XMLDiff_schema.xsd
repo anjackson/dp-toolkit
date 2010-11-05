@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:element name="assertions">
+ <xs:complexType>
+ <xs:sequence>
+    <xs:element name="assertion" minOccurs="0" maxOccurs="unbounded">
+    <xs:complexType>
+	<xs:attribute name="xpath" type="xs:string" use="required"/>
+	<xs:attribute name="type" use="required">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+			 <xs:enumeration value="real"/>
+			 <xs:enumeration value="double"/>
+			 <xs:enumeration value="integer"/>
+			 <xs:enumeration value="complex"/>
+			 <xs:enumeration value="string"/>
+			 <xs:enumeration value="real_array"/>
+			 <xs:enumeration value="double_array"/>
+			 <xs:enumeration value="integer_array"/>
+			 <xs:enumeration value="complex_array"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="comparison" use="required">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+			 <xs:enumeration value="absolute"/>
+			 <xs:enumeration value="relative"/>
+			 <xs:enumeration value="equality"/>
+			 <xs:enumeration value="absolute_real"/>
+			 <xs:enumeration value="absolute_imaginary"/>
+			 <xs:enumeration value="relative_real"/>
+			 <xs:enumeration value="relative_imaginary"/>
+			 <xs:enumeration value="ignore"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="tolerance" type="xs:decimal" use="optional"/>
+    </xs:complexType>
+    </xs:element>
+ </xs:sequence>
+ </xs:complexType>
+</xs:element>
+
+</xs:schema>
