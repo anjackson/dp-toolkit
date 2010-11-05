@@ -8,7 +8,9 @@ Use cases
 
 Use case: Cloning a Hard Disk and collecting contextual information.
 I wish to clone a hard disk onto the file-system.
-I also wish to add other files to the collection (e.g. email describing the content).
+I may also wish to add other files to the collection (e.g. email describing the content).
+Similarly, in other circumstances, we wish to transfer the content from a HD to 
+another store, building and storing a checksum manifest along the way.
 
 Use case: Transferring files into bags held on safe storage locations.
 I have a set of files on a disk.
