@@ -71,7 +71,7 @@
 			<plugin>
 				<groupId>org.dstovall</groupId>
 				<artifactId>onejar-maven-plugin</artifactId>
-				<version>1.4.1</version>
+				<version>1.4.4</version>
 				<executions>
 					<execution>
 						<configuration>
@@ -139,6 +139,7 @@
 			<name>JBoss Repo</name>
 			<url>http://repository.jboss.com/maven2/</url>
 		</repository>
+		-->
         <repository>
             <id>jboss-public-repository-group</id>
             <name>JBoss Public Maven Repository Group</name>
@@ -153,7 +154,6 @@
                 <updatePolicy>never</updatePolicy>
             </snapshots>
         </repository>
-		-->
 		<!-- 
         <repository>
         	<id>planets-suite-repository</id>
@@ -171,13 +171,12 @@
 		 -->
     </repositories>
 
-
-	<pluginRepositories>
-		<pluginRepository>
-			<id>onejar-maven-plugin.googlecode.com</id>
-			<url>http://onejar-maven-plugin.googlecode.com/svn/mavenrepo</url>
-		</pluginRepository>
-	</pluginRepositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>onejar-maven-plugin.googlecode.com</id>
+            <url>http://onejar-maven-plugin.googlecode.com/svn/mavenrepo</url>
+        </pluginRepository>
+    </pluginRepositories>
 
 	<dependencies>
 		<dependency>
