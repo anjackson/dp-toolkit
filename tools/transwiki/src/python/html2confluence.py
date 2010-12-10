@@ -140,13 +140,13 @@ class HtmlToTextileConvertingParser(sgmllib.SGMLParser):
     def start_a(self, attrs):
         self.a_href = attrs.get("href")
         if self.a_href:
-            self._write(" \"")
+            self._write(" [")
             self._start_capture("a")
 
     def end_a(self):
         if self.a_href:
             self._stop_capture_and_write()
-            self._write(["\":", self.a_href, " "])
+            self._write(["|", self.a_href, "] "])
             self.a_href = False
 
     def start_img(self, attrs):
