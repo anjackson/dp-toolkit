@@ -15,11 +15,6 @@
 
 package org.altlaw.hadoop;
 
-/* From hadoop-*-core.jar, http://hadoop.apache.org/
- * Developed with Hadoop 0.16.3. */
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.LocalFileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Writable;

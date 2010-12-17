@@ -30,7 +30,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>uk.bl.dpt.contentprofiler.ContentProfiler</mainClass>
+							<mainClass>net.anjackson.dpt.tools.toseq.ToSeq</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -144,20 +144,5 @@
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
-	<repositories>
-		<repository>
-			<id>project</id>
-			<name>Project Repository</name>
-			<!-- 
-			<url>file:///${basedir}/local-repository</url>
-			 -->
-			<url>file://./../local-repository</url>
-			<layout>default</layout>
-		</repository>
-		<repository>
-			<id>jboss</id>
-			<name>JBoss Repo</name>
-			<url>http://repository.jboss.com/maven2/</url>
-		</repository>
-	</repositories>
+	
 </project>

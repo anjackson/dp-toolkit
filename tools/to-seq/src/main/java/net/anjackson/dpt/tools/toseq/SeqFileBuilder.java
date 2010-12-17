@@ -1,0 +1,104 @@
+/* TarToSeqFile.java - Convert tar files into Hadoop SequenceFiles.
+ *
+ * Copyright (C) 2008 Stuart Sierra
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
+ * http:www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+package net.anjackson.dpt.tools.toseq;
+
+/* From ant.jar, http://ant.apache.org/ */
+import org.altlaw.hadoop.LocalSetup;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.BytesWritable;
+import org.apache.hadoop.io.SequenceFile;
+import org.apache.hadoop.io.Text;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
+
+/** 
+ * The output SequenceFile will be stored with BLOCK compression.  Each key (a
+ * Text) in the SequenceFile should be the name of the file in the 
+ * archive, and its value (a BytesWritable) the contents of the
+ * file.
+ *
+ * @author Stuart Sierra (mail@stuartsierra.com)
+ * @see <a href="http://hadoop.apache.org/core/docs/r0.16.3/api/org/apache/hadoop/io/SequenceFile.html">SequenceFile</a>
+ * @see <a href="http://hadoop.apache.org/core/docs/r0.16.3/api/org/apache/hadoop/io/Text.html">Text</a>
+ * @see <a href="http://hadoop.apache.org/core/docs/r0.16.3/api/org/apache/hadoop/io/BytesWritable.html">BytesWritable</a>
+ */
+public class SeqFileBuilder {
+
+    private File outputFile;
+    private LocalSetup setup;
+    SequenceFile.Writer output = null;
+
+    /** Sets up Configuration and LocalFileSystem instances for
+     * Hadoop.  Throws Exception if they fail.  Does not load any
+     * Hadoop XML configuration files, just sets the minimum
+     * configuration necessary to use the local file system.
+     */
+    public SeqFileBuilder(File outputFile) throws Exception {
+        setup = new LocalSetup();
+        this.outputFile = outputFile;
+    }
+
+    /** Performs the conversion. */
+    public synchronized void add( String filename, InputStream in, long size ) throws Exception {
+    	Text key = new Text(filename);
+    	BytesWritable value = new BytesWritable(getBytes(in,size));
+    	output.append(key, value);
+    }
+
+    public SequenceFile.Writer openOutputFile() throws Exception {
+        Path outputPath = new Path(outputFile.getAbsolutePath());
+        return SequenceFile.createWriter(setup.getLocalFileSystem(), setup.getConf(),
+                                         outputPath,
+                                         Text.class, BytesWritable.class,
+                                         SequenceFile.CompressionType.BLOCK);
+    }
+    
+    public void close() throws IOException { 
+        if (output != null) { output.close(); }
+    }
+
+    /** Reads all bytes from the current entry in the tar file and
+     * returns them as a byte array.
+     *
+     * @see http://www.exampledepot.com/egs/java.io/File2ByteArray.html
+     */
+    private static byte[] getBytes(InputStream input, long size) throws Exception {
+        if (size > Integer.MAX_VALUE) {
+            throw new Exception("A file in the tar archive is too large.");
+        }
+        int length = (int)size;
+        byte[] bytes = new byte[length];
+
+        int offset = 0;
+        int numRead = 0;
+
+        while (offset < bytes.length &&
+               (numRead = input.read(bytes, offset, bytes.length - offset)) >= 0) {
+            offset += numRead;
+        }
+
+        if (offset < bytes.length) {
+            throw new IOException("A file in the tar archive could not be completely read.");
+        }
+
+        return bytes;
+    }
+
+    
+}
