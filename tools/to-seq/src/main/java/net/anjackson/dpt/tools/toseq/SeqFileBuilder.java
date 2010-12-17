@@ -42,7 +42,9 @@ public class SeqFileBuilder {
 
     private File outputFile;
     private LocalSetup setup;
-    SequenceFile.Writer output = null;
+    private SequenceFile.Writer output = null;
+    // Internal buffer, starting at 100KB.
+    private byte[] bytes = new byte[100*1024];
 
     /** Sets up Configuration and LocalFileSystem instances for
      * Hadoop.  Throws Exception if they fail.  Does not load any
@@ -78,12 +80,14 @@ public class SeqFileBuilder {
      *
      * @see http://www.exampledepot.com/egs/java.io/File2ByteArray.html
      */
-    private static byte[] getBytes(InputStream input, long size) throws Exception {
+    private byte[] getBytes(InputStream input, long size) throws Exception {
         if (size > Integer.MAX_VALUE) {
-            throw new Exception("A file in the tar archive is too large.");
+            throw new Exception("A file in the archive is too large.");
         }
         int length = (int)size;
-        byte[] bytes = new byte[length];
+        if( bytes.length < length ) {
+        	bytes = new byte[length];
+        }
 
         int offset = 0;
         int numRead = 0;
@@ -94,7 +98,7 @@ public class SeqFileBuilder {
         }
 
         if (offset < bytes.length) {
-            throw new IOException("A file in the tar archive could not be completely read.");
+            throw new IOException("A file in the archive could not be completely read.");
         }
 
         return bytes;

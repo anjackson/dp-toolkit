@@ -17,6 +17,8 @@ package net.anjackson.dpt.tools.toseq;
 
 import java.io.File;
 
+import org.altlaw.hadoop.SeqKeyList;
+
 
 /** Utility to convert zip or tar files into Hadoop SequenceFiles.  The tar
  * files may be compressed with GZip or BZip2.  The output
@@ -52,6 +54,16 @@ public class ToSeq {
         	} else {
         		TarToSeq.execute(inputFile, outputFile);
         	}
+        	System.out.println("Sequence file created. Testing it can be read...");
+        	// Output, and so test that it worked.
+            try {
+                SeqKeyList me = new SeqKeyList();
+                me.setInput(args[1]);
+                me.execute();
+            } catch (Exception e) {
+            	System.err.println("Error occured when validating the created sequence file!");
+                e.printStackTrace();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             exitWithHelp();
