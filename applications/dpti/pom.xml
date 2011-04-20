@@ -27,7 +27,7 @@
               <goal>izpack</goal>
             </goals>
             <configuration>
-              <izpackBasedir>${staging.dir}</izpackBasedir>
+              <izpackBasedir>src/izpack</izpackBasedir>
             </configuration>
           </execution>
         </executions>
@@ -55,7 +55,7 @@
               <outputDirectory>${staging.dir}</outputDirectory>
               <resources>
                 <resource>
-                  <directory>src/main/resources</directory>
+                  <directory>src/izpack</directory>
                 </resource>
               </resources>
             </configuration>
