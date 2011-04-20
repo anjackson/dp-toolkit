@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <registry>
-  <pack name="main">
+  <pack name="Core">
 
     <key    keypath="*\shell\open with dpti\command"
                         root="HKCR"/>

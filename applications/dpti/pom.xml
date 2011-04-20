@@ -2,14 +2,14 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
  
-  <groupId>test</groupId>
-  <artifactId>test18</artifactId>
+  <groupId>org.opf-labs</groupId>
+  <artifactId>dpti</artifactId>
   <name>Test IzPack and maven</name>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
  
   <properties>
-    <staging.dir>${project.build.directory}/izpack</staging.dir>
+    <staging.dir>${project.build.directory}/staging</staging.dir>
     <izpack.standalone.compiler.version>4.3.2</izpack.standalone.compiler.version>
   </properties>
  
@@ -27,6 +27,7 @@
               <goal>izpack</goal>
             </goals>
             <configuration>
+              <descriptor>src/izpack/install.xml</descriptor>
               <izpackBasedir>${staging.dir}</izpackBasedir>
             </configuration>
           </execution>
@@ -42,7 +43,7 @@
  
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>2.4.2</version>
+        <version>2.4.3</version>
         <executions>
           <execution>
             <id>copy-resources</id>
@@ -50,8 +51,9 @@
             <goals>
               <goal>copy-resources</goal>
             </goals>
-            <configuration>
+            <configuration><!--
               <encoding>UTF-8</encoding>
+              -->
               <outputDirectory>${staging.dir}</outputDirectory>
               <resources>
                 <resource>
