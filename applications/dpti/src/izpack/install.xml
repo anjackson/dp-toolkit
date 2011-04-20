@@ -24,6 +24,8 @@
  
   <panels>
     <panel classname="HelloPanel" />
+    <panel classname="TargetPanel" />
+    <panel classname="InstallPanel" />
     <panel classname="SimpleFinishPanel" />
   </panels>
  
@@ -34,7 +36,7 @@
   </packs>
 
   <resources>
-    <res src="MyRegistrySpec.xml"
+    <res src="izpack-registryspec.xml"
     id="RegistrySpec.xml"/>
   </resources>
 

@@ -27,7 +27,7 @@
               <goal>izpack</goal>
             </goals>
             <configuration>
-              <izpackBasedir>src/izpack</izpackBasedir>
+              <izpackBasedir>${staging.dir}</izpackBasedir>
             </configuration>
           </execution>
         </executions>
@@ -46,7 +46,7 @@
         <executions>
           <execution>
             <id>copy-resources</id>
-            <phase>validate</phase>
+            <phase>generate-sources</phase>
             <goals>
               <goal>copy-resources</goal>
             </goals>
