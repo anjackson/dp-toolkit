@@ -23,6 +23,7 @@
 		       dest="target/generated-sources/main/java">
 		    <patternset>
 		        <include name="metadata-extractor/src/java/**/*.java"/>
+		        <exclude name="metadata-extractor/src/java/nz/govt/natlib/meta/config/Config.java"/>
 		    </patternset>
 			<mapper type="glob" from="metadata-extractor/src/java/*" to="*"/>
 		</unjar>
@@ -32,6 +33,8 @@
 		       dest="target/generated-sources/test/java">
 		    <patternset>
 		        <include name="metadata-extractor/src/tests/**/*.java"/>
+		        <exclude name="metadata-extractor/src/tests/nz/govt/natlib/adapter/AdapterTest.java"/>
+		        <exclude name="metadata-extractor/src/tests/nz/govt/natlib/adapter/TestDataAdapter.java"/>
 		    </patternset>
 			<mapper type="glob" from="metadata-extractor/src/tests/*" to="*"/>
 		</unjar>
@@ -117,9 +120,6 @@
             <configuration>
               <resources>
                 <resource>
-                  <directory>${project.build.directory}/generated-sources/test/resources</directory>
-                </resource>
-                <resource>
                   <directory>${project.build.directory}/metadata-extractor/resources/tests</directory>
                   <excludes>
                     <exclude>java/**</exclude>
@@ -142,7 +142,11 @@
        <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
+		<version>2.8.1</version>
         <configuration>
+          <systemPropertyVariables>
+            <test.resources.dir>${project.build.directory}/metadata-extractor/resources/tests</test.resources.dir>
+          </systemPropertyVariables>
           <workingDirectory>target</workingDirectory>
           <excludes>
             <exclude>com/drew/lang/test/TestHelper.java</exclude>
@@ -154,20 +158,6 @@
 				<artifactId>maven-install-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>install-heretrix</id>
-						<phase>initialize</phase>
-						<goals>
-							<goal>install-file</goal>
-						</goals>
-						<configuration>
-							<file>lib/heritrix-1.14.1.jar</file>
-							<groupId>heritrix</groupId>
-							<artifactId>heritrix</artifactId>
-							<version>1.14.1</version>
-							<packaging>jar</packaging>
-						</configuration>
-					</execution>
-					<execution>
 						<id>install-jflac</id>
 						<phase>process-resources</phase>
 						<goals>
@@ -178,20 +168,6 @@
 							<groupId>jflac</groupId>
 							<artifactId>jflac</artifactId>
 							<version>1.3</version>
-							<packaging>jar</packaging>
-						</configuration>
-					</execution>
-					<execution>
-						<id>install-blowfishj</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>install-file</goal>
-						</goals>
-						<configuration>
-							<file>lib/bfj220.jar</file>
-							<groupId>blowfishj</groupId>
-							<artifactId>blowfishj</artifactId>
-							<version>2.2.0</version>
 							<packaging>jar</packaging>
 						</configuration>
 					</execution>
@@ -251,21 +227,6 @@
   		<scope>compile</scope>
   	</dependency>
   	<dependency>
-  		<groupId>heritrix</groupId>
-  		<artifactId>heritrix</artifactId>
-  		<version>1.14.1</version>
-  		<scope>system</scope>
-  		<systemPath>${basedir}/lib/heritrix-1.14.1.jar
-</systemPath>
-  	</dependency>
-  	<dependency>
-  		<groupId>blowfishj</groupId>
-  		<artifactId>blowfishj</artifactId>
-  		<version>2.2.0</version>
-  		<scope>system</scope>
-  		<systemPath>${basedir}/lib/bfj220.jar</systemPath>
-  	</dependency>
-  	<dependency>
   		<groupId>jflac</groupId>
   		<artifactId>jflac</artifactId>
   		<version>1.3</version>
@@ -287,5 +248,16 @@
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>
+  	<dependency>
+  		<groupId>org.archive.heritrix</groupId>
+  		<artifactId>heritrix-commons</artifactId>
+  		<version>3.0.0</version>
+  	</dependency>
   </dependencies>
+  <repositories>
+    <repository>
+      <id>archive-org-repo</id>
+      <url>http://builds.archive.org:8080/maven2/</url>
+    </repository>
+  </repositories>
 </project>
