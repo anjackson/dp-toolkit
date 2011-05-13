@@ -2,22 +2,160 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.sourceforge.meta-extractor</groupId>
   <artifactId>meta-extractor</artifactId>
-  <version>3.4.1</version>
+  <version>3.5GA-MVN</version>
 	<build>
 		<plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <configuration>
+              <tasks>
+              
+		<!-- get source jar -->
+		<mkdir dir="target"/>
+		<get src="http://downloads.sourceforge.net/project/meta-extractor/meta-extractor/3.5GA/meta-extractor-src-3-5GA.zip?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fmeta-extractor%2F&amp;ts=1305233312&amp;use_mirror=ovh"
+		     dest="target/meta-extractor-src.jar" usetimestamp="true" ignoreerrors="true"/>
+		
+		<!-- unpack classes -->
+		<unjar src="target/meta-extractor-src.jar"
+		       dest="target/generated-sources/main/java">
+		    <patternset>
+		        <include name="metadata-extractor/src/java/**/*.java"/>
+		    </patternset>
+			<mapper type="glob" from="metadata-extractor/src/java/*" to="*"/>
+		</unjar>
+		
+		<!-- unpack tests -->
+		<unjar src="target/meta-extractor-src.jar"
+		       dest="target/generated-sources/test/java">
+		    <patternset>
+		        <include name="metadata-extractor/src/tests/**/*.java"/>
+		    </patternset>
+			<mapper type="glob" from="metadata-extractor/src/tests/*" to="*"/>
+		</unjar>
+		<!-- 
+		<unjar src="target/meta-extractor-src.jar"
+		       dest="target/generated-sources/test/resources">
+		    <patternset>
+		        <include name="metadata-extractor/src/tests/**"/>
+		        <exclude name="metadata-extractor/src/tests/**/*.java"/>
+		    </patternset>
+			<mapper type="glob" from="metadata-extractor/src/tests/*" to="*"/>
+		</unjar>
+		 -->
+
+		<!-- unpack all -->
+		<unjar src="target/meta-extractor-src.jar"
+		       dest="target/">
+		    <patternset>
+		        <include name="**/*.*"/>
+		    </patternset>
+		</unjar>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+	  <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.5</version>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${project.build.directory}/generated-sources/main/java</source>
+              </sources>
+            </configuration>
+          </execution>
+		  <execution>
+            <id>add-test-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${project.build.directory}/generated-sources/test/java</source>
+              </sources>
+            </configuration>
+          </execution>
+		  <execution>
+            <id>add-resource</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>add-resource</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>${project.build.directory}/metadata-extractor/src</directory>
+                  <excludes>
+                    <exclude>java/**</exclude>
+                    <exclude>tests/**</exclude>
+                  </excludes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>          
+		  <execution>
+            <id>add-test-resource</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>add-test-resource</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>${project.build.directory}/generated-sources/test/resources</directory>
+                </resource>
+                <resource>
+                  <directory>${project.build.directory}/metadata-extractor/resources/tests</directory>
+                  <excludes>
+                    <exclude>java/**</exclude>
+                    <exclude>tests/**</exclude>
+                  </excludes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>          
+        </executions>
+      </plugin>      
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+			        <encoding>ISO-8859-1</encoding>
 				</configuration>
 			</plugin>
+       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <workingDirectory>target</workingDirectory>
+          <excludes>
+            <exclude>com/drew/lang/test/TestHelper.java</exclude>
+            <exclude>com/drew/metadata/test/AllTests.java</exclude>
+          </excludes>
+        </configuration>
+      </plugin>      
 			<plugin>
 				<artifactId>maven-install-plugin</artifactId>
 				<executions>
 					<execution>
 						<id>install-heretrix</id>
-						<phase>process-resources</phase>
+						<phase>initialize</phase>
 						<goals>
 							<goal>install-file</goal>
 						</goals>
@@ -116,16 +254,24 @@
   		<groupId>heritrix</groupId>
   		<artifactId>heritrix</artifactId>
   		<version>1.14.1</version>
+  		<scope>system</scope>
+  		<systemPath>${basedir}/lib/heritrix-1.14.1.jar
+</systemPath>
   	</dependency>
   	<dependency>
   		<groupId>blowfishj</groupId>
   		<artifactId>blowfishj</artifactId>
   		<version>2.2.0</version>
+  		<scope>system</scope>
+  		<systemPath>${basedir}/lib/bfj220.jar</systemPath>
   	</dependency>
   	<dependency>
   		<groupId>jflac</groupId>
   		<artifactId>jflac</artifactId>
   		<version>1.3</version>
+  		<scope>system</scope>
+  		<systemPath>${basedir}/lib/jflac-1.3-jdk1.4.jar</systemPath>
+  		<optional>true</optional>
   	</dependency>
   	<dependency>
   		<groupId>fastutil</groupId>
