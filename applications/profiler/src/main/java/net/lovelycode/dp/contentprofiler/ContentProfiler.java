@@ -132,6 +132,7 @@ public class ContentProfiler {
     }
 
     public static void profile( FileSummarizeEvent fse, File file ) {
+    	// TODO This is the recurser, which needs to patch in VFS to recurse inside things and extract the files.
         if( file.isFile() ) {
             FileSummary fs = profileOneItem( file );
             if( fs != null ) {

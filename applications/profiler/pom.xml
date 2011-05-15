@@ -262,21 +262,33 @@
 			<systemPath>${basedir}/src/bundles/fits-0.4.2/fits-0.4.2/lib/fits.jar</systemPath>
 		</dependency>
 		 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-vfs</artifactId>
+			<version>2.0-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.stephenc.java-iso-tools</groupId>
+			<artifactId>loopy-vfs</artifactId>
+			<version>1.2.2</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 	<repositories>
 		<repository>
-			<id>project</id>
-			<name>Project Repository</name>
-			<!-- 
-			<url>file:///${basedir}/local-repository</url>
-			 -->
-			<url>file://./../local-repository</url>
-			<layout>default</layout>
+			<id>apache-snapshots-repo</id>
+			<name>Apache Snapshots Repository</name>
+			<url>https://repository.apache.org/content/groups/snapshots-group/</url>
 		</repository>
+		<!-- 
 		<repository>
 			<id>jboss</id>
 			<name>JBoss Repo</name>
 			<url>http://repository.jboss.com/maven2/</url>
 		</repository>
+		 -->
 	</repositories>
 </project>
